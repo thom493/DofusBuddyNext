@@ -1,6 +1,6 @@
-﻿namespace DofusBuddy.Settings
+﻿namespace DofusBuddy.Core.Settings
 {
-    public class WindowPosition
+    public class WindowPositionSettings
     {
         public double Top { get; set; }
 

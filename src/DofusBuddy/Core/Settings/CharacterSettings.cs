@@ -1,6 +1,6 @@
-﻿namespace DofusBuddy.Settings
+﻿namespace DofusBuddy.Core.Settings
 {
-    public class Character
+    public class CharacterSettings
     {
         public string? Id { get; set; }
 

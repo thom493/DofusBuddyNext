@@ -1,12 +1,18 @@
-﻿namespace DofusBuddy
+﻿using DofusBuddy.Core;
+
+namespace DofusBuddy
 {
     /// <summary>
     /// Interaction logic for MainPage.xaml
     /// </summary>
     public partial class MainPage
     {
-        public MainPage()
+        private readonly MultiAccountManager _multiAccountManager;
+
+        public MainPage(MultiAccountManager multiAccountManager)
         {
+            _multiAccountManager = multiAccountManager;
+
             InitializeComponent();
         }
 

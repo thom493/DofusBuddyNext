@@ -3,7 +3,8 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
-using DofusBuddy.Settings;
+using DofusBuddy.Core;
+using DofusBuddy.Core.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -82,8 +83,9 @@ namespace DofusBuddy
             var services = new ServiceCollection();
 
             services.Configure<ApplicationSettings>(configuration.GetSection(nameof(ApplicationSettings)));
-            services.AddTransient(typeof(MainWindow));
-            services.AddTransient(typeof(MainPage));
+            services.AddSingleton<MainWindow>();
+            services.AddSingleton<MainPage>();
+            services.AddSingleton<MultiAccountManager>();
 
             return services.BuildServiceProvider();
         }

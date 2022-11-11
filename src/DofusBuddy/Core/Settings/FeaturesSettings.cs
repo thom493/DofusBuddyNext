@@ -1,6 +1,6 @@
-﻿namespace DofusBuddy.Settings
+﻿namespace DofusBuddy.Core.Settings
 {
-    public class Features
+    public class FeaturesSettings
     {
         public bool AutoSwitchInFight { get; set; }
 

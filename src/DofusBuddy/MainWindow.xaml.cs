@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using DofusBuddy.Settings;
+using DofusBuddy.Core.Settings;
 using Microsoft.Extensions.Options;
 
 namespace DofusBuddy
@@ -34,7 +34,7 @@ namespace DofusBuddy
 
         private void UiWindow_Closing(object sender, CancelEventArgs e)
         {
-            _applicationSettings.WindowPosition = new WindowPosition
+            _applicationSettings.WindowPosition = new WindowPositionSettings
             {
                 Top = Top,
                 Left = Left,
