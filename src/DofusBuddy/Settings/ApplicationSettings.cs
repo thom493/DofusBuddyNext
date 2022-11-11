@@ -6,7 +6,7 @@ namespace DofusBuddy.Settings
     {
         public List<Character> Characters { get; set; } = new List<Character>();
 
-        public WindowPosition? WindowPosition { get; set; }
+        public WindowPosition WindowPosition { get; set; }
 
         public Features Features { get; set; } = new Features();
     }

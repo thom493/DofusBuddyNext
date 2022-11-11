@@ -12,6 +12,7 @@
              Title="Dofus Buddy"
              ExtendsContentIntoTitleBar="True"
              Background="{ui:ThemeResource ApplicationBackgroundBrush}"
+             Closing="UiWindow_Closing"
              Topmost="True">
     <StackPanel Orientation="Vertical">
         <ui:TitleBar FontWeight="Bold"

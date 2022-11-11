@@ -6,6 +6,7 @@ using System.Windows;
 using DofusBuddy.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace DofusBuddy
 {
@@ -26,11 +27,30 @@ namespace DofusBuddy
 
             IConfigurationRoot configuration = GetConfiguration();
 
-            ServiceProvider serviceProvider = ConfigureServices(configuration);
+            ServiceProvider = ConfigureServices(configuration);
 
-            MainWindow mainWindow = serviceProvider.GetRequiredService<MainWindow>();
+            MainWindow mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
 
             mainWindow.Show();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            SaveAppSettings();
+        }
+
+        private void SaveAppSettings()
+        {
+            ApplicationSettings appSettings = ServiceProvider.GetService<IOptions<ApplicationSettings>>().Value;
+
+            var settings = new
+            {
+                ApplicationSettings = appSettings
+            };
+
+            string json = JsonSerializer.Serialize(settings);
+
+            File.WriteAllText(_dofusBuddyAppsettingsPath, json);
         }
 
         private static void EnsureConfigurationExists()
@@ -57,7 +77,7 @@ namespace DofusBuddy
             fileStream.Write(Encoding.UTF8.GetBytes(json));
         }
 
-        private ServiceProvider ConfigureServices(IConfigurationRoot configuration)
+        private static ServiceProvider ConfigureServices(IConfigurationRoot configuration)
         {
             var services = new ServiceCollection();
 
@@ -72,7 +92,7 @@ namespace DofusBuddy
         {
             IConfigurationBuilder builder = new ConfigurationBuilder()
                 .SetBasePath(_dofusBuddyAppDataFolderPath)
-                .AddJsonFile(_appSettingsFileName, optional: false, reloadOnChange: true);
+                .AddJsonFile(_appSettingsFileName);
 
             return builder.Build();
         }

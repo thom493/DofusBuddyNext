@@ -1,4 +1,5 @@
-﻿using DofusBuddy.Settings;
+﻿using System.ComponentModel;
+using DofusBuddy.Settings;
 using Microsoft.Extensions.Options;
 
 namespace DofusBuddy
@@ -29,6 +30,16 @@ namespace DofusBuddy
                 Left = _applicationSettings.WindowPosition.Left;
                 Width = _applicationSettings.WindowPosition.Width;
             }
+        }
+
+        private void UiWindow_Closing(object sender, CancelEventArgs e)
+        {
+            _applicationSettings.WindowPosition = new WindowPosition
+            {
+                Top = Top,
+                Left = Left,
+                Width = Width
+            };
         }
     }
 }

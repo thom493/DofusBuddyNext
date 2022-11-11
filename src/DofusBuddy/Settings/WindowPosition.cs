@@ -2,10 +2,10 @@
 {
     public class WindowPosition
     {
-        public int Top { get; set; }
+        public double Top { get; set; }
 
-        public int Left { get; set; }
+        public double Left { get; set; }
 
-        public int Width { get; set; }
+        public double Width { get; set; }
     }
 }
