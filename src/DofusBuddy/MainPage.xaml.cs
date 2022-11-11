@@ -1,11 +1,11 @@
 ﻿namespace DofusBuddy
 {
     /// <summary>
-    /// Interaction logic for DashboardPage.xaml
+    /// Interaction logic for MainPage.xaml
     /// </summary>
-    public partial class DashboardPage
+    public partial class MainPage
     {
-        public DashboardPage()
+        public MainPage()
         {
             InitializeComponent();
         }
@@ -17,7 +17,7 @@
                 return;
             }
 
-            System.Windows.Window parentWindow = System.Windows.Window.GetWindow(this);
+            var parentWindow = System.Windows.Window.GetWindow(this);
 
             if (parentWindow == null)
             {
