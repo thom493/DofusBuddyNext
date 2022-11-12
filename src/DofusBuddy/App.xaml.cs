@@ -91,6 +91,9 @@ namespace DofusBuddy
             services.AddSingleton<MainWindow>();
             services.AddSingleton<MainPage>();
             services.AddSingleton<MainPageViewModel>();
+            services.AddSingleton<HookManager>();
+            services.AddSingleton<WindowManager>();
+            services.AddSingleton<CharacterManager>();
 
             return services.BuildServiceProvider();
         }

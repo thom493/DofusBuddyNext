@@ -64,8 +64,8 @@
                         <StackPanel Grid.Column="1"
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right">
-                            <ui:ToggleSwitch Margin="4"
-                                             Background="{StaticResource BrushGreenPantone}" />
+                            <!--<ui:ToggleSwitch Margin="4"
+                                             Background="{StaticResource BrushGreenPantone}" />-->
                             <ui:Button Margin="4,0,0,0"
                                        Padding="8"
                                        Icon="Settings32" />
@@ -92,5 +92,10 @@
                        Height="1"
                        Fill="{StaticResource BrushVioletBlueCrayola}" />
         </Grid>
+        <ui:ToggleSwitch FontSize="16"
+                         FontWeight="SemiBold"
+                         Background="{StaticResource BrushGreenPantone}"
+                         Content="Réplication des clics"
+                         IsChecked="{Binding ApplicationSettings.Features.ReplicateMouseClicks}"></ui:ToggleSwitch>
     </StackPanel>
 </Page>

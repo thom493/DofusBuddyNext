@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel;
 using DofusBuddy.Core.Settings;
 using Microsoft.Extensions.Options;
+using Wpf.Ui.Controls;
 
 namespace DofusBuddy
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow
+    public partial class MainWindow : UiWindow
     {
         private readonly ApplicationSettings _applicationSettings;
 
