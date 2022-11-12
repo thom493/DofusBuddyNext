@@ -1,11 +1,48 @@
-﻿namespace DofusBuddy.Core.Settings
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace DofusBuddy.Core.Settings
 {
-    public class FeaturesSettings
+    public class FeaturesSettings : ObservableObject
     {
-        public bool AutoSwitchInFight { get; set; }
+        private bool _replicateMouseClicks;
+        private string? _replicateMouseClicksKeyBinding;
+        private bool _autoSwitchInFight;
+        private bool _autoSwitchOnGroupInvite;
+        private bool _autoSwitchOnTradeInvite;
 
-        public bool AutoSwitchOnGroupInvite { get; set; }
+        public bool ReplicateMouseClicks
+        {
+            get => _replicateMouseClicks;
+            set =>
+                SetProperty(ref _replicateMouseClicks, value);
+        }
 
-        public bool AutoSwitchOnTradeInvite { get; set; }
+        public string? ReplicateMouseClicksKeyBinding
+        {
+            get => _replicateMouseClicksKeyBinding;
+            set =>
+                SetProperty(ref _replicateMouseClicksKeyBinding, value);
+        }
+
+        public bool AutoSwitchInFight
+        {
+            get => _autoSwitchInFight;
+            set =>
+                SetProperty(ref _autoSwitchInFight, value);
+        }
+
+        public bool AutoSwitchOnGroupInvite
+        {
+            get => _autoSwitchOnGroupInvite;
+            set =>
+                SetProperty(ref _autoSwitchOnGroupInvite, value);
+        }
+
+        public bool AutoSwitchOnTradeInvite
+        {
+            get => _autoSwitchOnTradeInvite;
+            set =>
+                SetProperty(ref _autoSwitchOnTradeInvite, value);
+        }
     }
 }

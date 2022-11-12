@@ -1,7 +1,6 @@
 ﻿<Application x:Class="DofusBuddy.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:DofusBuddy"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -9,6 +8,11 @@
                 <ui:ControlsDictionary />
                 <ui:ThemesDictionary Theme="Dark" />
             </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush x:Key="BrushGreenPantone"
+                             Color="#4DAA57" />
+
+            <SolidColorBrush x:Key="BrushVioletBlueCrayola"
+                             Color="#6369D1" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

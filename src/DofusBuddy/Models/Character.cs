@@ -1,17 +1,18 @@
 ﻿using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using DofusBuddy.Core.Settings;
 
-namespace DofusBuddy.Core
+namespace DofusBuddy.Models
 {
-    public class Character
+    public class Character : ObservableObject
     {
         public Character(CharacterSettings characterSettings, Process process)
         {
-            CharacterSettings = characterSettings;
+            Settings = characterSettings;
             Process = process;
         }
 
-        public CharacterSettings CharacterSettings { get; set; }
+        public CharacterSettings Settings { get; set; }
 
         public Process Process { get; set; }
     }

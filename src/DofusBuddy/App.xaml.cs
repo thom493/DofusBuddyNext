@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Windows;
 using DofusBuddy.Core;
 using DofusBuddy.Core.Settings;
+using DofusBuddy.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -20,18 +21,20 @@ namespace DofusBuddy
         private static readonly string _dofusBuddyAppDataFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dofus.Buddy");
         private static readonly string _dofusBuddyAppsettingsPath = Path.Combine(_dofusBuddyAppDataFolderPath, _appSettingsFileName);
 
-        public IServiceProvider? ServiceProvider { get; private set; }
+        private IServiceProvider ServiceProvider { get; set; }
 
-        protected override void OnStartup(StartupEventArgs e)
+        public App()
         {
             EnsureConfigurationExists();
 
-            IConfigurationRoot configuration = GetConfiguration();
+            ServiceProvider = ConfigureServices();
 
-            ServiceProvider = ConfigureServices(configuration);
+            InitializeComponent();
+        }
 
+        protected override void OnStartup(StartupEventArgs e)
+        {
             MainWindow mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-
             mainWindow.Show();
         }
 
@@ -78,14 +81,16 @@ namespace DofusBuddy
             fileStream.Write(Encoding.UTF8.GetBytes(json));
         }
 
-        private static ServiceProvider ConfigureServices(IConfigurationRoot configuration)
+        private static ServiceProvider ConfigureServices()
         {
+            IConfigurationRoot configuration = GetConfiguration();
+
             var services = new ServiceCollection();
 
             services.Configure<ApplicationSettings>(configuration.GetSection(nameof(ApplicationSettings)));
             services.AddSingleton<MainWindow>();
             services.AddSingleton<MainPage>();
-            services.AddSingleton<MultiAccountManager>();
+            services.AddSingleton<MainPageViewModel>();
 
             return services.BuildServiceProvider();
         }

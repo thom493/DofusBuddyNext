@@ -26,6 +26,7 @@
                 </ui:NotifyIcon>
             </ui:TitleBar.Tray>
         </ui:TitleBar>
+        <Separator />
         <Frame x:Name="MainFrame"
                Margin="8" />
     </StackPanel>
