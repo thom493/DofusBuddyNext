@@ -6,12 +6,12 @@ namespace DofusBuddy.Core.GameEvents
     {
         public string CharacterId { get; set; }
 
-        public string Message { get; set; }
+        public string CharacterName { get; set; }
 
-        public ChatMessageEventArgs(string characterId, string message)
+        public ChatMessageEventArgs(string characterId, string characterName)
         {
             CharacterId = characterId;
-            Message = message;
+            CharacterName = characterName;
         }
     }
 }

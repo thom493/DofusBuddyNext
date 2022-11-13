@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using DofusBuddy.Core.Settings;
@@ -12,35 +12,44 @@ namespace DofusBuddy.Core
         private readonly ApplicationSettings _applicationSettings;
         private readonly WindowManager _windowManager;
 
-        public List<Character> ActiveCharacters { get; set; }
+        public ObservableCollection<Character> ActiveCharacters { get; set; }
 
         public CharacterManager(IOptions<ApplicationSettings> options, WindowManager windowManager)
         {
             _applicationSettings = options.Value;
             _windowManager = windowManager;
-            ActiveCharacters = GetActiveCharacters();
+            SetActiveCharacters();
         }
 
-        private List<Character> GetActiveCharacters()
+        public void AddCharacter(CharacterSettings characterSettings)
         {
-            List<Character> characters = new();
+            Process? process = GetCharacterProcess(characterSettings.Name);
+            ActiveCharacters.Add(new Character(characterSettings, process!));
+        }
 
-            Process[] dofusProcesses = Process
-                .GetProcessesByName("Dofus Retro")
-                .Where(x => x.MainWindowHandle != default)
-                .ToArray();
+        public void UpdateApplicationSettings(ApplicationSettings applicationSettings)
+        {
+            applicationSettings.Characters = ActiveCharacters
+                .Select(x => x.Settings)
+                .ToList();
+        }
 
-            foreach (Process process in dofusProcesses)
+        private void SetActiveCharacters()
+        {
+            ActiveCharacters = new ObservableCollection<Character>();
+            foreach (CharacterSettings character in _applicationSettings.Characters)
             {
-                CharacterSettings? settings = _applicationSettings.Characters.FirstOrDefault(x => x.Name == _windowManager.GetCharacterNameFromProcessWindowTitle(process));
-
-                if (settings is not null)
-                {
-                    characters.Add(new Character(settings, process));
-                }
+                AddCharacter(character);
             }
+        }
 
-            return characters;
+        private Process? GetCharacterProcess(string characterName)
+        {
+            Process? process = Process
+                .GetProcessesByName("Dofus Retro")
+                .SingleOrDefault(x => x.MainWindowHandle != default && _windowManager.GetCharacterNameFromProcessWindowTitle(x) == characterName);
+
+            return process;
         }
     }
 }

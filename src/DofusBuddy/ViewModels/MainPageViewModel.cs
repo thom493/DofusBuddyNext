@@ -7,13 +7,16 @@ using CommunityToolkit.Mvvm.Input;
 using DofusBuddy.Core;
 using DofusBuddy.Core.Settings;
 using DofusBuddy.Models;
+using DofusBuddy.Views;
 using Gma.System.MouseKeyHook;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace DofusBuddy.ViewModels
 {
     public class MainPageViewModel : ObservableObject
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly HookManager _hookManager;
         private readonly CharacterManager _characterManager;
         private readonly PacketManager _packetManager;
@@ -33,7 +36,15 @@ namespace DofusBuddy.ViewModels
             set => SetProperty(ref _toggleAutoSwitchOnFightTurnCommand, value);
         }
 
+        private IRelayCommand _displayCharacterDetectionDialogCommand;
+        public IRelayCommand DisplayCharacterDetectionDialogCommand
+        {
+            get => _displayCharacterDetectionDialogCommand;
+            set => SetProperty(ref _displayCharacterDetectionDialogCommand, value);
+        }
+
         private ApplicationSettings _applicationSettings;
+
         public ApplicationSettings ApplicationSettings
         {
             get => _applicationSettings;
@@ -47,8 +58,14 @@ namespace DofusBuddy.ViewModels
             set => SetProperty(ref _characters, value);
         }
 
-        public MainPageViewModel(IOptions<ApplicationSettings> options, HookManager hookManager, CharacterManager characterManager, PacketManager packetManager, GameManager gameManager)
+        public MainPageViewModel(IServiceProvider provider,
+            IOptions<ApplicationSettings> options,
+            HookManager hookManager,
+            CharacterManager characterManager,
+            PacketManager packetManager,
+            GameManager gameManager)
         {
+            _serviceProvider = provider;
             ApplicationSettings = options.Value;
             _hookManager = hookManager;
             _characterManager = characterManager;
@@ -56,11 +73,12 @@ namespace DofusBuddy.ViewModels
             _gameManager = gameManager;
             ToggleReplicateMouseClicksCommand = new RelayCommand<bool>(ToggleReplicateMouseClicks);
             ToggleAutoSwitchOnFightTurnCommand = new RelayCommand<bool>(ToggleAutoSwitchOnFightTurn);
+            DisplayCharacterDetectionDialogCommand = new RelayCommand(DisplayCharacterDetectionDialog);
         }
 
         public void Initialize()
         {
-            Characters = new ObservableCollection<Character>(_characterManager.ActiveCharacters);
+            Characters = _characterManager.ActiveCharacters;
             _hookManager.Initialize();
             _packetManager.Initialize();
 
@@ -125,6 +143,11 @@ namespace DofusBuddy.ViewModels
             {
                 _packetManager.FightTurnPacketReceived -= _gameManager.OnFightTurn;
             }
+        }
+
+        private void DisplayCharacterDetectionDialog()
+        {
+            _serviceProvider.GetService<CharacterDetectionWindow>().ShowDialog();
         }
     }
 }

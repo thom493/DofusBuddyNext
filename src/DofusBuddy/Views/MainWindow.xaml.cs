@@ -3,7 +3,7 @@ using DofusBuddy.Core.Settings;
 using Microsoft.Extensions.Options;
 using Wpf.Ui.Controls;
 
-namespace DofusBuddy
+namespace DofusBuddy.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

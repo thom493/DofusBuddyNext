@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using DofusBuddy.ViewModels;
 
-namespace DofusBuddy
+namespace DofusBuddy.Views
 {
     /// <summary>
     /// Interaction logic for MainPage.xaml

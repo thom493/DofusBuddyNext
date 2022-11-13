@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DofusBuddy.Core.GameEvents;
 using DofusBuddy.Core.Settings;
@@ -30,7 +31,7 @@ namespace DofusBuddy.Core
 
         public void OnFightTurn(object? sender, FightTurnEventArgs args)
         {
-
+            throw new NotImplementedException();
         }
 
         public async void OnGameWindowClick(object? sender, MouseHookEventArgs eventArgs)

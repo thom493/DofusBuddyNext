@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using DofusBuddy.Core.GameEvents;
 using PacketDotNet;
 using SharpPcap;
@@ -28,20 +27,17 @@ namespace DofusBuddy.Core
 
         public void Initialize()
         {
-            Task.Run(() =>
-            {
-                string hostName = Dns.GetHostName();
-                IPAddress localNetworkAddress = Dns.GetHostEntry(hostName).AddressList
-                    .First(x => x.AddressFamily == AddressFamily.InterNetwork);
+            string hostName = Dns.GetHostName();
+            IPAddress localNetworkAddress = Dns.GetHostEntry(hostName).AddressList
+                .First(x => x.AddressFamily == AddressFamily.InterNetwork);
 
-                LibPcapLiveDevice device = CaptureDeviceList.Instance
-                    .OfType<LibPcapLiveDevice>()
-                    .First(x => x.Addresses.Any(y => localNetworkAddress.Equals(y.Addr.ipAddress)));
+            LibPcapLiveDevice device = CaptureDeviceList.Instance
+                .OfType<LibPcapLiveDevice>()
+                .First(x => x.Addresses.Any(y => localNetworkAddress.Equals(y.Addr.ipAddress)));
 
-                device.Open();
-                device.OnPacketArrival += Device_OnPacketArrival;
-                device.StartCapture();
-            });
+            device.Open();
+            device.OnPacketArrival += Device_OnPacketArrival;
+            device.StartCapture();
         }
 
         private void Device_OnPacketArrival(object sender, PacketCapture packetCapture)

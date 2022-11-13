@@ -6,6 +6,7 @@ using System.Windows;
 using DofusBuddy.Core;
 using DofusBuddy.Core.Settings;
 using DofusBuddy.ViewModels;
+using DofusBuddy.Views;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -45,7 +46,10 @@ namespace DofusBuddy
 
         private void SaveAppSettings()
         {
-            ApplicationSettings appSettings = ServiceProvider.GetService<IOptions<ApplicationSettings>>().Value;
+            ApplicationSettings appSettings = ServiceProvider.GetService<IOptions<ApplicationSettings>>()!.Value;
+            CharacterManager characterManager = ServiceProvider.GetService<CharacterManager>()!;
+
+            characterManager.UpdateApplicationSettings(appSettings);
 
             var settings = new
             {
@@ -88,14 +92,18 @@ namespace DofusBuddy
             var services = new ServiceCollection();
 
             services.Configure<ApplicationSettings>(configuration.GetSection(nameof(ApplicationSettings)));
-            services.AddSingleton<MainWindow>();
-            services.AddSingleton<MainPage>();
-            services.AddSingleton<MainPageViewModel>();
+            services.AddTransient<MainWindow>();
+            services.AddTransient<MainPage>();
+            services.AddTransient<CharacterDetectionWindow>();
+
             services.AddSingleton<HookManager>();
             services.AddSingleton<WindowManager>();
             services.AddSingleton<CharacterManager>();
             services.AddSingleton<PacketManager>();
             services.AddSingleton<GameManager>();
+
+            services.AddSingleton<MainPageViewModel>();
+            services.AddTransient<CharacterDetectionViewModel>();
 
             return services.BuildServiceProvider();
         }
