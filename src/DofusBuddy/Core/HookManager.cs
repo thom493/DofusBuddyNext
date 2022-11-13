@@ -49,7 +49,7 @@ namespace DofusBuddy.Core
         private void AddReplicateMouseClicksKeyBinding(List<KeyValuePair<Combination, Action>> bindings)
         {
             var combination = Combination.FromString(_applicationSettings.Features.ReplicateMouseClicksKeyBinding);
-            Action action = () => { _applicationSettings.Features.ReplicateMouseClicks = !_applicationSettings.Features.ReplicateMouseClicks; };
+            void action() => _applicationSettings.Features.ReplicateMouseClicks = !_applicationSettings.Features.ReplicateMouseClicks;
             bindings.Add(new KeyValuePair<Combination, Action>(combination, action));
         }
 
@@ -58,7 +58,7 @@ namespace DofusBuddy.Core
             foreach (Character character in characters.Where(x => !string.IsNullOrEmpty(x.Settings.FocusWindowKeyBinding)))
             {
                 var combination = Combination.FromString(character.Settings.FocusWindowKeyBinding);
-                Action action = () => _windowManager.SetForegroundWindow(character.Process.MainWindowHandle);
+                void action() => _windowManager.SetForegroundWindow(character.Process.MainWindowHandle);
                 bindings.Add(new KeyValuePair<Combination, Action>(combination, action));
             }
         }
@@ -83,18 +83,22 @@ namespace DofusBuddy.Core
                 return;
             }
 
-            foreach (Character? character in characters.Where(x => x.Settings.Name != foregroundCharacter.Settings.Name))
+            var windowInfo = new User32.WINDOWINFO();
+            User32.GetWindowInfo(foregroundCharacter.Process.MainWindowHandle, ref windowInfo);
+
+            foreach (Character character in characters.Where(x => x.Settings.Name != foregroundCharacter.Settings.Name))
             {
                 await Task.Delay(_applicationSettings.Features.ReplicateMouseClicksDelay);
-                SendLeftClickToWindow(character.Process.MainWindowHandle, eventArgs.Data.X, eventArgs.Data.Y);
+                SendLeftClickToWindow(character.Process.MainWindowHandle, eventArgs.Data.X, eventArgs.Data.Y - windowInfo.rcClient.top);
             }
         }
 
         private static void SendLeftClickToWindow(IntPtr windowHandle, int x, int y)
         {
-            var lParam = (IntPtr)((y << 16) | (x & 0xffff));
-            User32.PostMessage(windowHandle, User32.WindowMessage.WM_LBUTTONDOWN, new IntPtr(0x0001), lParam);
-            User32.PostMessage(windowHandle, User32.WindowMessage.WM_LBUTTONUP, new IntPtr(0x0000), lParam);
+            var lParam = (IntPtr)(x | (y << 16));
+
+            User32.SendMessage(windowHandle, User32.WindowMessage.WM_LBUTTONDOWN, new IntPtr(0x0001), lParam);
+            User32.SendMessage(windowHandle, User32.WindowMessage.WM_LBUTTONUP, new IntPtr(0x0000), lParam);
         }
     }
 }
