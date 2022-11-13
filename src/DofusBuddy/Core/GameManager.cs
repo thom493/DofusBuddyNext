@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using DofusBuddy.Core.GameEvents;
 using DofusBuddy.Core.Settings;
@@ -31,7 +30,11 @@ namespace DofusBuddy.Core
 
         public void OnFightTurn(object? sender, FightTurnEventArgs args)
         {
-            throw new NotImplementedException();
+            Character? character = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Id == args.CharacterId);
+            if (character is not null)
+            {
+                DisplayCharacterWindow(character);
+            }
         }
 
         public async void OnGameWindowClick(object? sender, MouseHookEventArgs eventArgs)
@@ -52,7 +55,7 @@ namespace DofusBuddy.Core
             var windowInfo = new User32.WINDOWINFO();
             User32.GetWindowInfo(foregroundCharacter.Process.MainWindowHandle, ref windowInfo);
 
-            foreach (Character character in _characterManager.ActiveCharacters.Where(x => x.Settings.Name != foregroundCharacter.Settings.Name))
+            foreach (Character character in _characterManager.ActiveCharacters.Where(x => x.Process is not null && x.Settings.Name != foregroundCharacter.Settings.Name))
             {
                 await Task.Delay(_applicationSettings.Features.ReplicateMouseClicksDelay);
                 _windowManager.SendLeftClickToWindow(character.Process.MainWindowHandle, eventArgs.Data.X, eventArgs.Data.Y - windowInfo.rcClient.top);

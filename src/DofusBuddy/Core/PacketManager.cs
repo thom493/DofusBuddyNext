@@ -15,7 +15,7 @@ namespace DofusBuddy.Core
     public class PacketManager
     {
         private const string _galgarionIpAddress = "172.65.204.203";
-        private readonly Regex _fightTurnRegex = new("^GTM\\|.*?\\|(\\d*);");
+        private readonly Regex _fightTurnRegex = new("^GTM.*?GTS(\\d*)\\|");
         private readonly Regex _chatMessageRegex = new("^cMK\\|(\\d*)\\|(.*?)\\|(.*?)\\|");
 
         public event EventHandler<FightTurnEventArgs>? FightTurnPacketReceived;
@@ -84,9 +84,6 @@ namespace DofusBuddy.Core
         private void OnDofusPacketArrival(byte[] bytes)
         {
             string data = Encoding.ASCII.GetString(bytes);
-
-            Debug.Write($"packet: {data}");
-            Debug.Write(Environment.NewLine);
 
             if (IsGameTurnPacket(data, out FightTurnEventArgs? fightTurnEventArgs))
             {
