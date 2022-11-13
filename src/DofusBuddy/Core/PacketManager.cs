@@ -85,6 +85,8 @@ namespace DofusBuddy.Core
         {
             string data = Encoding.ASCII.GetString(bytes);
 
+            Debug.WriteLine($"packet: {data.Replace("\0", "\\0")}");
+
             if (IsGameTurnPacket(data, out FightTurnEventArgs? fightTurnEventArgs))
             {
                 FightTurnPacketReceived?.Invoke(this, fightTurnEventArgs!);
