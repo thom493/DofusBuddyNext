@@ -8,10 +8,12 @@ namespace DofusBuddy
     /// </summary>
     public partial class MainPage : Page
     {
+
         public MainPage(MainPageViewModel mainPageViewModel)
         {
-            DataContext = mainPageViewModel;
             InitializeComponent();
+            DataContext = mainPageViewModel;
+            mainPageViewModel.Initialize();
         }
     }
 }

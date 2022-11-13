@@ -26,5 +26,12 @@ namespace DofusBuddy.Core
                 .Groups[1]
                 .Value;
         }
+
+        public void SendLeftClickToWindow(IntPtr windowHandle, int x, int y)
+        {
+            var lParam = (IntPtr)(x | (y << 16));
+            User32.SendMessage(windowHandle, User32.WindowMessage.WM_LBUTTONDOWN, new IntPtr(0x0001), lParam);
+            User32.SendMessage(windowHandle, User32.WindowMessage.WM_LBUTTONUP, new IntPtr(0x0000), lParam);
+        }
     }
 }

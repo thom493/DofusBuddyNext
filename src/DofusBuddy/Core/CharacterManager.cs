@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using DofusBuddy.Core.Settings;
@@ -12,16 +12,18 @@ namespace DofusBuddy.Core
         private readonly ApplicationSettings _applicationSettings;
         private readonly WindowManager _windowManager;
 
+        public List<Character> ActiveCharacters { get; set; }
+
         public CharacterManager(IOptions<ApplicationSettings> options, WindowManager windowManager)
         {
             _applicationSettings = options.Value;
             _windowManager = windowManager;
-
+            ActiveCharacters = GetActiveCharacters();
         }
 
-        public ObservableCollection<Character> GetActiveCharacters()
+        private List<Character> GetActiveCharacters()
         {
-            ObservableCollection<Character> characters = new();
+            List<Character> characters = new();
 
             Process[] dofusProcesses = Process
                 .GetProcessesByName("Dofus Retro")

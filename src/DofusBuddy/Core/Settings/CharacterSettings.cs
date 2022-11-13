@@ -6,7 +6,6 @@ namespace DofusBuddy.Core.Settings
     {
         private string? _id;
         private string? _name;
-        private bool _follow;
         private bool _autoSkipInFight;
         private string? _focusWindowKeyBinding;
 
@@ -20,12 +19,6 @@ namespace DofusBuddy.Core.Settings
         {
             get => _name;
             set => SetProperty(ref _name, value);
-        }
-
-        public bool Follow
-        {
-            get => _follow;
-            set => SetProperty(ref _follow, value);
         }
 
         public bool AutoSkipInFight

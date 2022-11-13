@@ -75,7 +75,7 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <Grid Margin="0,0,0,8">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -92,10 +92,21 @@
                        Height="1"
                        Fill="{StaticResource BrushVioletBlueCrayola}" />
         </Grid>
-        <ui:ToggleSwitch FontSize="16"
+        <ui:ToggleSwitch Margin="0,8,0,0"
+                         FontSize="16"
+                         FontWeight="SemiBold"
+                         Background="{StaticResource BrushGreenPantone}"
+                         Content="Switch au début du tour"
+                         Command="{Binding ToggleAutoSwitchOnFightTurnCommand}"
+                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
+                         IsChecked="{Binding ApplicationSettings.Features.AutoSwitchOnFightTurn}"></ui:ToggleSwitch>
+        <ui:ToggleSwitch Margin="0,8,0,0"
+                         FontSize="16"
                          FontWeight="SemiBold"
                          Background="{StaticResource BrushGreenPantone}"
                          Content="Réplication des clics"
+                         Command="{Binding ToggleReplicateMouseClicksCommand}"
+                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
                          IsChecked="{Binding ApplicationSettings.Features.ReplicateMouseClicks}"></ui:ToggleSwitch>
     </StackPanel>
 </Page>

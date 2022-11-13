@@ -8,7 +8,7 @@ namespace DofusBuddy.Core.Settings
         private bool _replicateMouseClicks;
         private int _replicateMouseClicksDelay = 200;
         private string? _replicateMouseClicksKeyBinding;
-        private bool _autoSwitchInFight;
+        private bool _autoSwitchOnFightTurn;
         private bool _autoSwitchOnGroupInvite;
         private bool _autoSwitchOnTradeInvite;
 
@@ -31,10 +31,10 @@ namespace DofusBuddy.Core.Settings
             set => SetProperty(ref _replicateMouseClicksKeyBinding, value);
         }
 
-        public bool AutoSwitchInFight
+        public bool AutoSwitchOnFightTurn
         {
-            get => _autoSwitchInFight;
-            set => SetProperty(ref _autoSwitchInFight, value);
+            get => _autoSwitchOnFightTurn;
+            set => SetProperty(ref _autoSwitchOnFightTurn, value);
         }
 
         public bool AutoSwitchOnGroupInvite
