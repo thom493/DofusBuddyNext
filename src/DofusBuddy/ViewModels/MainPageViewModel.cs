@@ -37,11 +37,11 @@ namespace DofusBuddy.ViewModels
             set => SetProperty(ref _toggleAutoSwitchOnFightTurnCommand, value);
         }
 
-        private IRelayCommand _displayCharacterDetectionDialogCommand;
-        public IRelayCommand DisplayCharacterDetectionDialogCommand
+        private IRelayCommand _displayAddCharacterDialogCommand;
+        public IRelayCommand DisplayAddCharacterDialogCommand
         {
-            get => _displayCharacterDetectionDialogCommand;
-            set => SetProperty(ref _displayCharacterDetectionDialogCommand, value);
+            get => _displayAddCharacterDialogCommand;
+            set => SetProperty(ref _displayAddCharacterDialogCommand, value);
         }
 
         private ApplicationSettings _applicationSettings;
@@ -68,7 +68,7 @@ namespace DofusBuddy.ViewModels
             ToggleReplicateMouseClicksCommand = new RelayCommand<bool>(x => _gameManager.ToggleReplicateMouseClicks(x));
             ToggleSingleReplicateMouseClicks = new RelayCommand(_gameManager.ToggleSingleReplicateMouseClicks);
             ToggleAutoSwitchOnFightTurnCommand = new RelayCommand<bool>(x => _gameManager.ToggleAutoSwitchOnFightTurn(x));
-            DisplayCharacterDetectionDialogCommand = new RelayCommand(() => _serviceProvider.GetService<CharacterDetectionWindow>().ShowDialog());
+            DisplayAddCharacterDialogCommand = new RelayCommand(() => _serviceProvider.GetService<AddCharacterView>().Show());
         }
     }
 }

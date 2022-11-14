@@ -94,7 +94,7 @@ namespace DofusBuddy
             services.Configure<ApplicationSettings>(configuration.GetSection(nameof(ApplicationSettings)));
             services.AddTransient<MainWindow>();
             services.AddTransient<MainPage>();
-            services.AddTransient<CharacterDetectionWindow>();
+            services.AddTransient<AddCharacterView>();
 
             services.AddSingleton<HookManager>();
             services.AddSingleton<WindowManager>();
@@ -102,8 +102,8 @@ namespace DofusBuddy
             services.AddSingleton<PacketManager>();
             services.AddSingleton<GameManager>();
 
-            services.AddSingleton<MainPageViewModel>();
-            services.AddTransient<CharacterDetectionViewModel>();
+            services.AddTransient<MainPageViewModel>();
+            services.AddTransient<AddCharacterViewModel>();
 
             return services.BuildServiceProvider();
         }

@@ -10,7 +10,7 @@ using DofusBuddy.Models;
 
 namespace DofusBuddy.ViewModels
 {
-    public class CharacterDetectionViewModel : ObservableObject, IDisposable
+    public class AddCharacterViewModel : ObservableObject, IDisposable
     {
         private readonly PacketManager _packetManager;
         private readonly CharacterManager _characterManager;
@@ -35,7 +35,7 @@ namespace DofusBuddy.ViewModels
             set => SetProperty(ref _addCharacterCommand, value);
         }
 
-        public CharacterDetectionViewModel(PacketManager packetManager, CharacterManager characterManager)
+        public AddCharacterViewModel(PacketManager packetManager, CharacterManager characterManager)
         {
             _packetManager = packetManager;
             _characterManager = characterManager;
