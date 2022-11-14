@@ -17,10 +17,6 @@ namespace DofusBuddy.Core
         {
             KeyboardMouseEvents = Hook.GlobalEvents();
             GlobalHook = new TaskPoolGlobalHook(new TaskPoolGlobalHookOptions(true));
-        }
-
-        public void Initialize()
-        {
             GlobalHook.RunAsync();
         }
     }

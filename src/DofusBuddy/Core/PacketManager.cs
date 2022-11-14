@@ -23,10 +23,6 @@ namespace DofusBuddy.Core
 
         public PacketManager()
         {
-        }
-
-        public void Initialize()
-        {
             string hostName = Dns.GetHostName();
             IPAddress localNetworkAddress = Dns.GetHostEntry(hostName).AddressList
                 .First(x => x.AddressFamily == AddressFamily.InterNetwork);

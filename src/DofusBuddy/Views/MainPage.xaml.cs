@@ -13,7 +13,6 @@ namespace DofusBuddy.Views
         {
             InitializeComponent();
             DataContext = mainPageViewModel;
-            mainPageViewModel.Initialize();
         }
     }
 }

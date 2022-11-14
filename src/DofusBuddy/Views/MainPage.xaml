@@ -49,7 +49,7 @@
                         <TextBlock Grid.Column="0"
                                    FontSize="16"
                                    FontWeight="SemiBold"
-                                   Text="{Binding Path=Settings.Name}"
+                                   Text="{Binding Settings.Name}"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    d:Text="{Binding .}"
@@ -57,6 +57,9 @@
                         <StackPanel Grid.Column="1"
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right">
+                            <ui:ToggleSwitch Background="{StaticResource BrushGreenPantone}"
+                                             Command="{Binding DataContext.ToggleSingleReplicateMouseClicks, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                             IsChecked="{Binding Settings.ReplicateMouseClick}" />
                             <ui:Button Margin="4,0,0,0"
                                        Padding="8"
                                        Icon="Settings32" />
@@ -90,7 +93,7 @@
                          Content="Switch au début du tour"
                          Command="{Binding ToggleAutoSwitchOnFightTurnCommand}"
                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
-                         IsChecked="{Binding ApplicationSettings.Features.AutoSwitchOnFightTurn}"></ui:ToggleSwitch>
+                         IsChecked="{Binding ApplicationSettings.Features.AutoSwitchOnFightTurn}" />
         <ui:ToggleSwitch Margin="0,8,0,0"
                          FontSize="16"
                          FontWeight="SemiBold"
@@ -98,6 +101,6 @@
                          Content="Réplication des clics"
                          Command="{Binding ToggleReplicateMouseClicksCommand}"
                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
-                         IsChecked="{Binding ApplicationSettings.Features.ReplicateMouseClicks}"></ui:ToggleSwitch>
+                         IsChecked="{Binding ApplicationSettings.Features.ReplicateMouseClicks}" />
     </StackPanel>
 </Page>

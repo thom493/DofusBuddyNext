@@ -6,8 +6,8 @@ namespace DofusBuddy.Core.Settings
     {
         private string? _id;
         private string? _name;
-        private bool _autoSkipInFight;
         private string? _focusWindowKeyBinding;
+        private bool _replicateMouseClick;
 
         public string? Id
         {
@@ -21,16 +21,16 @@ namespace DofusBuddy.Core.Settings
             set => SetProperty(ref _name, value);
         }
 
-        public bool AutoSkipInFight
-        {
-            get => _autoSkipInFight;
-            set => SetProperty(ref _autoSkipInFight, value);
-        }
-
         public string? FocusWindowKeyBinding
         {
             get => _focusWindowKeyBinding;
             set => SetProperty(ref _focusWindowKeyBinding, value);
+        }
+
+        public bool ReplicateMouseClick
+        {
+            get => _replicateMouseClick;
+            set => SetProperty(ref _replicateMouseClick, value);
         }
     }
 }
