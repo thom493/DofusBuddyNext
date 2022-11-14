@@ -1,16 +1,12 @@
-name: main
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+name: Build
 on:
   push:
     branches:
       - "main"
     paths-ignore:
-      - "**/*.md"
-      - "**/*.gitignore"
-      - "**/*.gitattributes"
-  pull_request:
-    branches:
-      - "main"
-    paths-ignore:
+      - ".github/workflows/release.yml"
       - "**/*.md"
       - "**/*.gitignore"
       - "**/*.gitattributes"
@@ -21,17 +17,9 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v3
-
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.0.x
-
-      - name: Restore
-        run: dotnet restore
-
       - name: Build
-        run: dotnet build --configuration Release --no-restore
-
-      - name: Test
-        run: dotnet test --no-restore
+        run: dotnet build --configuration Release

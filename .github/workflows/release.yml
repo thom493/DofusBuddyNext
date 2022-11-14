@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+name: Release
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  release:
+    name: Release
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Publish
+        run: dotnet publish src\DofusBuddy\DofusBuddy.csproj --nologo -c Release -r win-x64 --self-contained false -p:DebugType=None
+      - name: Zip release
+        uses: thedoctor0/zip-release@0.6.2
+        with:
+          type: zip
+          filename: DofusBuddy.zip
+          directory: src\DofusBuddy\bin\Release\net6.0-windows\win-x64\publish\
+      - name: Create Release
+        uses: ncipollo/release-action@v1.11.2
+        with:
+          artifacts: src\DofusBuddy\bin\Release\net6.0-windows\win-x64\publish\DofusBuddy.zip
