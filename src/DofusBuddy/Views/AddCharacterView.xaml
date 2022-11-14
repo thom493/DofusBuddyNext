@@ -62,7 +62,7 @@
                                        IconForeground="Red"
                                        Icon="Delete24"
                                        CommandParameter="{Binding .}"
-                                       Command="{Binding DataContext.DeleteCharacterCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                                       Command="{Binding DataContext.RemoveCharacterCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
                         </StackPanel>
                     </Grid>
                 </DataTemplate>

@@ -92,7 +92,7 @@ namespace DofusBuddy.Core
                 return;
             }
 
-            Character? foregroundCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Process?.MainWindowHandle == User32.GetForegroundWindow());
+            Character? foregroundCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Process.MainWindowHandle == User32.GetForegroundWindow());
             if (foregroundCharacter is null)
             {
                 // The foreground window isn't dofus
@@ -102,7 +102,7 @@ namespace DofusBuddy.Core
             var windowInfo = new User32.WINDOWINFO();
             User32.GetWindowInfo(foregroundCharacter.Process.MainWindowHandle, ref windowInfo);
 
-            foreach (Character character in _characterManager.ActiveCharacters.Where(x => x.Settings.ReplicateMouseClick && x.Process is not null && x.Settings.Name != foregroundCharacter.Settings.Name))
+            foreach (Character character in _characterManager.ActiveCharacters.Where(x => x.Settings.ReplicateMouseClick && x.Settings.Name != foregroundCharacter.Settings.Name))
             {
                 await Task.Delay(_applicationSettings.Features.ReplicateMouseClicksDelay);
                 _windowManager.SendLeftClickToWindow(character.Process.MainWindowHandle, eventArgs.Data.X, eventArgs.Data.Y - windowInfo.rcClient.top);

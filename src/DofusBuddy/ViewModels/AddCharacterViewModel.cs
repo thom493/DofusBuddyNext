@@ -21,15 +21,15 @@ namespace DofusBuddy.ViewModels
             set => SetProperty(ref _detectedCharacters, value);
         }
 
-        private IRelayCommand _deleteCharacterCommand;
-        public IRelayCommand DeleteCharacterCommand
+        private IRelayCommand<DetectedCharcter> _removeCharacterCommand;
+        public IRelayCommand<DetectedCharcter> RemoveCharacterCommand
         {
-            get => _deleteCharacterCommand;
-            set => SetProperty(ref _deleteCharacterCommand, value);
+            get => _removeCharacterCommand;
+            set => SetProperty(ref _removeCharacterCommand, value);
         }
 
-        private IRelayCommand _addCharacterCommand;
-        public IRelayCommand AddCharacterCommand
+        private IRelayCommand<DetectedCharcter> _addCharacterCommand;
+        public IRelayCommand<DetectedCharcter> AddCharacterCommand
         {
             get => _addCharacterCommand;
             set => SetProperty(ref _addCharacterCommand, value);
@@ -40,7 +40,7 @@ namespace DofusBuddy.ViewModels
             _packetManager = packetManager;
             _characterManager = characterManager;
             _detectedCharacters = new ObservableCollection<DetectedCharcter>();
-            DeleteCharacterCommand = new RelayCommand<DetectedCharcter>(DeleteCharacter);
+            RemoveCharacterCommand = new RelayCommand<DetectedCharcter>(RemoveCharacter);
             AddCharacterCommand = new RelayCommand<DetectedCharcter>(AddCharacter);
         }
 
@@ -63,7 +63,7 @@ namespace DofusBuddy.ViewModels
             }
         }
 
-        private void DeleteCharacter(DetectedCharcter detectedCharacter)
+        private void RemoveCharacter(DetectedCharcter detectedCharacter)
         {
             DetectedCharacters.Remove(detectedCharacter);
         }
@@ -71,7 +71,7 @@ namespace DofusBuddy.ViewModels
         private void AddCharacter(DetectedCharcter detectedCharacter)
         {
             _characterManager.AddCharacter(new CharacterSettings { Id = detectedCharacter.Id, Name = detectedCharacter.Name });
-            DeleteCharacter(detectedCharacter);
+            RemoveCharacter(detectedCharacter);
         }
     }
 }

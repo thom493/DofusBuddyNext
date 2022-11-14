@@ -12,19 +12,28 @@ namespace DofusBuddy.Core
         private readonly ApplicationSettings _applicationSettings;
         private readonly WindowManager _windowManager;
 
-        public ObservableCollection<Character> ActiveCharacters { get; set; }
+        public ObservableCollection<Character> InactiveCharacters { get; set; } = new ObservableCollection<Character>();
+
+        public ObservableCollection<Character> ActiveCharacters { get; set; } = new ObservableCollection<Character>();
 
         public CharacterManager(IOptions<ApplicationSettings> options, WindowManager windowManager)
         {
             _applicationSettings = options.Value;
             _windowManager = windowManager;
-            SetActiveCharacters();
+            SetCharacters();
         }
 
         public void AddCharacter(CharacterSettings characterSettings)
         {
             Process? process = GetCharacterProcess(characterSettings.Name);
-            ActiveCharacters.Add(new Character(characterSettings, process!));
+            if (process is not null)
+            {
+                ActiveCharacters.Add(new Character(characterSettings, process));
+            }
+            else
+            {
+                InactiveCharacters.Add(new Character(characterSettings, null));
+            }
         }
 
         public void UpdateApplicationSettings(ApplicationSettings applicationSettings)
@@ -34,16 +43,15 @@ namespace DofusBuddy.Core
                 .ToList();
         }
 
-        private void SetActiveCharacters()
+        private void SetCharacters()
         {
-            ActiveCharacters = new ObservableCollection<Character>();
-            foreach (CharacterSettings character in _applicationSettings.Characters)
+            foreach (CharacterSettings characterSettings in _applicationSettings.Characters)
             {
-                AddCharacter(character);
+                AddCharacter(characterSettings);
             }
         }
 
-        private Process? GetCharacterProcess(string characterName)
+        private Process? GetCharacterProcess(string? characterName)
         {
             Process? process = Process
                 .GetProcessesByName("Dofus Retro")

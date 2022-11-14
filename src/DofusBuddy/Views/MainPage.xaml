@@ -63,7 +63,7 @@
                        Fill="{StaticResource BrushVioletBlueCrayola}" />
         </Grid>
 
-        <ItemsControl ItemsSource="{Binding Characters}"
+        <ItemsControl ItemsSource="{Binding CharacterManager.ActiveCharacters}"
                       d:ItemsSource="{StaticResource FakeListViewData}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
