@@ -13,20 +13,22 @@ namespace DofusBuddy.Core
 
         public void SetForegroundWindow(IntPtr windowHandle)
         {
-            int currentThreadId = Kernel32.GetCurrentThreadId();
-            int windowThreadProcessId = User32.GetWindowThreadProcessId(windowHandle, out _);
-
-            // Mandatory to avoid issues regarding User32.SetForegroundWindow limits
-            // see https://learn.microsoft.com/en-gb/windows/win32/api/winuser/nf-winuser-setforegroundwindow?redirectedfrom=MSDN#remarks
-            User32.AttachThreadInput(windowThreadProcessId, currentThreadId, true);
-
-            if (windowHandle != User32.GetForegroundWindow())
+            IntPtr foregroundWindowHandle = User32.GetForegroundWindow();
+            if (windowHandle != foregroundWindowHandle)
             {
-                User32.SetForegroundWindow(windowHandle);
-            }
+                int foregroundWindowThreadProcessId = User32.GetWindowThreadProcessId(foregroundWindowHandle, out _);
+                int currentThreadId = Kernel32.GetCurrentThreadId();
 
-            // Detach the 2 threads to avoid other potential issues
-            User32.AttachThreadInput(windowThreadProcessId, currentThreadId, false);
+                // Mandatory to avoid issues regarding User32.SetForegroundWindow limits
+                // see https://learn.microsoft.com/en-gb/windows/win32/api/winuser/nf-winuser-setforegroundwindow?redirectedfrom=MSDN#remarks
+                // https://stackoverflow.com/questions/19136365/win32-setforegroundwindow-not-working-all-the-time
+                User32.AttachThreadInput(foregroundWindowThreadProcessId, currentThreadId, true);
+
+                User32.BringWindowToTop(windowHandle);
+
+                // Detach the 2 threads to avoid other potential issues
+                User32.AttachThreadInput(foregroundWindowThreadProcessId, currentThreadId, false);
+            }
         }
 
         public string GetCharacterNameFromProcessWindowTitle(Process process)

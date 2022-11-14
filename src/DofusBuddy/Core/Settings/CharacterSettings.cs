@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Text.Json.Serialization;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace DofusBuddy.Core.Settings
 {
@@ -27,6 +28,7 @@ namespace DofusBuddy.Core.Settings
             set => SetProperty(ref _focusWindowKeyBinding, value);
         }
 
+        [JsonIgnore]
         public bool ReplicateMouseClick
         {
             get => _replicateMouseClick;
