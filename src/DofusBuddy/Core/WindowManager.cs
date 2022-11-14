@@ -25,6 +25,7 @@ namespace DofusBuddy.Core
                 User32.AttachThreadInput(foregroundWindowThreadProcessId, currentThreadId, true);
 
                 User32.BringWindowToTop(windowHandle);
+                User32.ShowWindow(windowHandle, User32.WindowShowStyle.SW_MAXIMIZE);
 
                 // Detach the 2 threads to avoid other potential issues
                 User32.AttachThreadInput(foregroundWindowThreadProcessId, currentThreadId, false);
