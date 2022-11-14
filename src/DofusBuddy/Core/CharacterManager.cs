@@ -24,6 +24,12 @@ namespace DofusBuddy.Core
         public void AddCharacter(CharacterSettings characterSettings)
         {
             Process? process = GetCharacterProcess(characterSettings.Name);
+
+            if (process != null)
+            {
+                _windowManager.AttachThreadInput(process.MainWindowHandle);
+            }
+
             ActiveCharacters.Add(new Character(characterSettings, process!));
         }
 

@@ -25,7 +25,10 @@ namespace DofusBuddy.Core
 
         public void DisplayCharacterWindow(Character character)
         {
-            _windowManager.SetForegroundWindow(character.Process.MainWindowHandle);
+            if (character.Process != null)
+            {
+                _windowManager.SetForegroundWindow(character.Process.MainWindowHandle);
+            }
         }
 
         public void OnFightTurn(object? sender, FightTurnEventArgs args)

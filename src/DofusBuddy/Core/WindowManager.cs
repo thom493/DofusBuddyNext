@@ -11,6 +11,17 @@ namespace DofusBuddy.Core
         {
         }
 
+        /// <summary>
+        /// Mandatory to avoid issues regarding User32.SetForegroundWindow limits
+        /// see https://learn.microsoft.com/en-gb/windows/win32/api/winuser/nf-winuser-setforegroundwindow?redirectedfrom=MSDN#remarks
+        /// </summary>
+        public void AttachThreadInput(IntPtr windowHandle)
+        {
+            int windowThreadProcessId = User32.GetWindowThreadProcessId(windowHandle, out _);
+            int currentThreadId = Kernel32.GetCurrentThreadId();
+            User32.AttachThreadInput(windowThreadProcessId, currentThreadId, true);
+        }
+
         public void SetForegroundWindow(IntPtr windowHandle)
         {
             if (windowHandle != User32.GetForegroundWindow())
