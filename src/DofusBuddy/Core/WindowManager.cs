@@ -11,23 +11,22 @@ namespace DofusBuddy.Core
         {
         }
 
-        /// <summary>
-        /// Mandatory to avoid issues regarding User32.SetForegroundWindow limits
-        /// see https://learn.microsoft.com/en-gb/windows/win32/api/winuser/nf-winuser-setforegroundwindow?redirectedfrom=MSDN#remarks
-        /// </summary>
-        public void AttachThreadInput(IntPtr windowHandle)
-        {
-            int windowThreadProcessId = User32.GetWindowThreadProcessId(windowHandle, out _);
-            int currentThreadId = Kernel32.GetCurrentThreadId();
-            User32.AttachThreadInput(windowThreadProcessId, currentThreadId, true);
-        }
-
         public void SetForegroundWindow(IntPtr windowHandle)
         {
+            int currentThreadId = Kernel32.GetCurrentThreadId();
+            int windowThreadProcessId = User32.GetWindowThreadProcessId(windowHandle, out _);
+
+            // Mandatory to avoid issues regarding User32.SetForegroundWindow limits
+            // see https://learn.microsoft.com/en-gb/windows/win32/api/winuser/nf-winuser-setforegroundwindow?redirectedfrom=MSDN#remarks
+            User32.AttachThreadInput(windowThreadProcessId, currentThreadId, true);
+
             if (windowHandle != User32.GetForegroundWindow())
             {
                 User32.SetForegroundWindow(windowHandle);
             }
+
+            // Detach the 2 threads to avoid other potential issues
+            User32.AttachThreadInput(windowThreadProcessId, currentThreadId, false);
         }
 
         public string GetCharacterNameFromProcessWindowTitle(Process process)

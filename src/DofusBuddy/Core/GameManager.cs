@@ -48,7 +48,7 @@ namespace DofusBuddy.Core
                 return;
             }
 
-            Character? foregroundCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Process.MainWindowHandle == User32.GetForegroundWindow());
+            Character? foregroundCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Process?.MainWindowHandle == User32.GetForegroundWindow());
             if (foregroundCharacter is null)
             {
                 // The foreground window isn't dofus
