@@ -12,42 +12,36 @@ namespace DofusBuddy.Core
         private readonly ApplicationSettings _applicationSettings;
         private readonly WindowManager _windowManager;
 
-        public ObservableCollection<Character> InactiveCharacters { get; set; } = new ObservableCollection<Character>();
-
         public ObservableCollection<Character> ActiveCharacters { get; set; } = new ObservableCollection<Character>();
 
         public CharacterManager(IOptions<ApplicationSettings> options, WindowManager windowManager)
         {
             _applicationSettings = options.Value;
             _windowManager = windowManager;
-            SetCharacters();
+            RefreshActiveCharacters();
         }
 
         public void AddCharacter(CharacterSettings characterSettings)
+        {
+            _applicationSettings.Characters.Add(characterSettings);
+            TryAddActiveCharacter(characterSettings);
+        }
+
+        public void RefreshActiveCharacters()
+        {
+            ActiveCharacters.Clear();
+            foreach (CharacterSettings characterSettings in _applicationSettings.Characters)
+            {
+                TryAddActiveCharacter(characterSettings);
+            }
+        }
+
+        private void TryAddActiveCharacter(CharacterSettings characterSettings)
         {
             Process? process = GetCharacterProcess(characterSettings.Name);
             if (process is not null)
             {
                 ActiveCharacters.Add(new Character(characterSettings, process));
-            }
-            else
-            {
-                InactiveCharacters.Add(new Character(characterSettings, null));
-            }
-        }
-
-        public void UpdateApplicationSettings(ApplicationSettings applicationSettings)
-        {
-            applicationSettings.Characters = ActiveCharacters
-                .Select(x => x.Settings)
-                .ToList();
-        }
-
-        private void SetCharacters()
-        {
-            foreach (CharacterSettings characterSettings in _applicationSettings.Characters)
-            {
-                AddCharacter(characterSettings);
             }
         }
 

@@ -47,9 +47,6 @@ namespace DofusBuddy
         private void SaveAppSettings()
         {
             ApplicationSettings appSettings = ServiceProvider.GetService<IOptions<ApplicationSettings>>()!.Value;
-            CharacterManager characterManager = ServiceProvider.GetService<CharacterManager>()!;
-
-            characterManager.UpdateApplicationSettings(appSettings);
 
             var settings = new
             {
