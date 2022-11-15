@@ -43,6 +43,13 @@ namespace DofusBuddy.ViewModels
             set => SetProperty(ref _displayAddCharacterDialogCommand, value);
         }
 
+        private IRelayCommand _refreshActiveCharactersCommand;
+        public IRelayCommand RefreshActiveCharactersCommand
+        {
+            get => _refreshActiveCharactersCommand;
+            set => SetProperty(ref _refreshActiveCharactersCommand, value);
+        }
+
         private ApplicationSettings _applicationSettings;
 
         public ApplicationSettings ApplicationSettings
@@ -50,7 +57,6 @@ namespace DofusBuddy.ViewModels
             get => _applicationSettings;
             set => SetProperty(ref _applicationSettings, value);
         }
-
 
         public MainPageViewModel(IServiceProvider provider, IOptions<ApplicationSettings> options, CharacterManager characterManager, GameManager gameManager)
         {
@@ -61,6 +67,7 @@ namespace DofusBuddy.ViewModels
             ToggleSingleReplicateMouseClicks = new RelayCommand(gameManager.ToggleSingleReplicateMouseClicks);
             ToggleAutoSwitchOnFightTurnCommand = new RelayCommand<bool>(x => gameManager.ToggleAutoSwitchOnFightTurn(x));
             DisplayAddCharacterDialogCommand = new RelayCommand(() => _serviceProvider.GetService<AddCharacterView>().Show());
+            RefreshActiveCharactersCommand = new RelayCommand(characterManager.RefreshActiveCharacters);
         }
     }
 }
