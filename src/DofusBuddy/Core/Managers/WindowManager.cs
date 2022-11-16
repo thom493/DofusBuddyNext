@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
 using PInvoke;
 
-namespace DofusBuddy.Core
+namespace DofusBuddy.Core.Managers
 {
     public class WindowManager
     {
@@ -25,19 +23,11 @@ namespace DofusBuddy.Core
                 User32.AttachThreadInput(foregroundWindowThreadProcessId, currentThreadId, true);
 
                 User32.BringWindowToTop(windowHandle);
-                User32.ShowWindow(windowHandle, User32.WindowShowStyle.SW_MAXIMIZE);
+                User32.ShowWindow(windowHandle, User32.WindowShowStyle.SW_SHOW);
 
                 // Detach the 2 threads to avoid other potential issues
                 User32.AttachThreadInput(foregroundWindowThreadProcessId, currentThreadId, false);
             }
-        }
-
-        public string GetCharacterNameFromProcessWindowTitle(Process process)
-        {
-            var regex = new Regex("(.*?) \\- ");
-            return regex.Match(process.MainWindowTitle)
-                .Groups[1]
-                .Value;
         }
 
         public void SendLeftClickToWindow(IntPtr windowHandle, int x, int y)

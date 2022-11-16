@@ -97,7 +97,15 @@
                          FontSize="16"
                          FontWeight="SemiBold"
                          Background="{StaticResource BrushGreenPantone}"
-                         Content="Switch au début du tour"
+                         Content="Réplication des clics"
+                         Command="{Binding ToggleReplicateMouseClicksCommand}"
+                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
+                         IsChecked="{Binding ApplicationSettings.Features.ReplicateMouseClicks}" />
+        <ui:ToggleSwitch Margin="0,8,0,0"
+                         FontSize="16"
+                         FontWeight="SemiBold"
+                         Background="{StaticResource BrushGreenPantone}"
+                         Content="Switch automatique au début du tour"
                          Command="{Binding ToggleAutoSwitchOnFightTurnCommand}"
                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
                          IsChecked="{Binding ApplicationSettings.Features.AutoSwitchOnFightTurn}" />
@@ -105,9 +113,9 @@
                          FontSize="16"
                          FontWeight="SemiBold"
                          Background="{StaticResource BrushGreenPantone}"
-                         Content="Réplication des clics"
-                         Command="{Binding ToggleReplicateMouseClicksCommand}"
+                         Content="Accepter automatiquement les invitations de groupe"
+                         Command="{Binding ToggleAutoAcceptGroupInvitationCommand}"
                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
-                         IsChecked="{Binding ApplicationSettings.Features.ReplicateMouseClicks}" />
+                         IsChecked="{Binding ApplicationSettings.Features.AutoAcceptGroupInvitation}" />
     </StackPanel>
 </Page>

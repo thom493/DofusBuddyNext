@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
-using DofusBuddy.Core;
+using DofusBuddy.Core.Managers;
 using DofusBuddy.Core.Settings;
 using DofusBuddy.ViewModels;
 using DofusBuddy.Views;
@@ -89,6 +89,9 @@ namespace DofusBuddy
             var services = new ServiceCollection();
 
             services.Configure<ApplicationSettings>(configuration.GetSection(nameof(ApplicationSettings)));
+
+            services.AddMemoryCache();
+
             services.AddTransient<MainWindow>();
             services.AddTransient<MainPage>();
             services.AddTransient<AddCharacterView>();
@@ -98,6 +101,7 @@ namespace DofusBuddy
             services.AddSingleton<CharacterManager>();
             services.AddSingleton<PacketManager>();
             services.AddSingleton<GameManager>();
+            services.AddSingleton<KeyboardManager>();
 
             services.AddTransient<MainPageViewModel>();
             services.AddTransient<AddCharacterViewModel>();

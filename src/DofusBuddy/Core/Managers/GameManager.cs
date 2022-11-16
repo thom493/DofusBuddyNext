@@ -9,9 +9,8 @@ using Gma.System.MouseKeyHook;
 using Microsoft.Extensions.Options;
 using PInvoke;
 using SharpHook;
-using SharpHook.Native;
 
-namespace DofusBuddy.Core
+namespace DofusBuddy.Core.Managers
 {
     public class GameManager
     {
@@ -20,16 +19,24 @@ namespace DofusBuddy.Core
         private readonly WindowManager _windowManager;
         private readonly HookManager _hookManager;
         private readonly PacketManager _packetManager;
+        private readonly KeyboardManager _keyboardManager;
 
-        public GameManager(IOptions<ApplicationSettings> options, CharacterManager characterManager, WindowManager windowManager, HookManager hookManager, PacketManager packetManager)
+        public GameManager(IOptions<ApplicationSettings> options,
+            CharacterManager characterManager,
+            WindowManager windowManager,
+            HookManager hookManager,
+            PacketManager packetManager,
+            KeyboardManager keyboardManager)
         {
             _applicationSettings = options.Value;
             _characterManager = characterManager;
             _windowManager = windowManager;
             _hookManager = hookManager;
             _packetManager = packetManager;
+            _keyboardManager = keyboardManager;
             SetupKeyboardKeybindings();
             ToggleAutoSwitchOnFightTurn(_applicationSettings.Features.AutoSwitchOnFightTurn);
+            ToggleAutoAcceptGroupInvitation(_applicationSettings.Features.AutoAcceptGroupInvitation);
         }
 
         public void ToggleReplicateMouseClicks(bool enabled)
@@ -75,18 +82,46 @@ namespace DofusBuddy.Core
             }
         }
 
-        private void OnFightTurn(object? sender, FightTurnEventArgs args)
+        public void ToggleAutoAcceptGroupInvitation(bool enabled)
         {
-            Character? character = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Id == args.CharacterId);
-            if (character is not null)
+            if (enabled)
             {
-                DisplayCharacterWindow(character);
+                _packetManager.GroupInvitationReceived += OnGroupInvitation;
+            }
+            else
+            {
+                _packetManager.GroupInvitationReceived -= OnGroupInvitation;
             }
         }
 
-        private async void OnGameWindowClick(object? sender, MouseHookEventArgs eventArgs)
+        private void OnGroupInvitation(object? sender, GroupInvitationEventArgs e)
         {
-            if (eventArgs.Data.Button != MouseButton.Button1)
+            Character? senderCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Name == e.SenderName);
+            Character? receiverCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Name == e.ReceiverName);
+            if (senderCharacter is not null && receiverCharacter is not null)
+            {
+                // Only execute action if both accounts are configured (to avoid accept other player's invitations)
+                // Keyboard inputs can only be reliably sent using User32.SendInput, therefore requiring the window to be on foreground
+                _windowManager.SetForegroundWindow(receiverCharacter.Process.MainWindowHandle);
+
+                _keyboardManager.SendReturnKey();
+
+                _windowManager.SetForegroundWindow(senderCharacter.Process.MainWindowHandle);
+            }
+        }
+
+        private void OnFightTurn(object? sender, FightTurnEventArgs e)
+        {
+            Character? character = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Id == e.CharacterId);
+            if (character is not null)
+            {
+                _windowManager.SetForegroundWindow(character.Process.MainWindowHandle);
+            }
+        }
+
+        private async void OnGameWindowClick(object? sender, MouseHookEventArgs e)
+        {
+            if (e.Data.Button != SharpHook.Native.MouseButton.Button1)
             {
                 // Mouse click isn't on left mouse button
                 return;
@@ -105,15 +140,8 @@ namespace DofusBuddy.Core
             foreach (Character character in _characterManager.ActiveCharacters.Where(x => x.Settings.ReplicateMouseClick && x.Settings.Name != foregroundCharacter.Settings.Name))
             {
                 await Task.Delay(_applicationSettings.Features.ReplicateMouseClicksDelay);
-                _windowManager.SendLeftClickToWindow(character.Process.MainWindowHandle, eventArgs.Data.X, eventArgs.Data.Y - windowInfo.rcClient.top);
-            }
-        }
-
-        private void DisplayCharacterWindow(Character character)
-        {
-            if (character.Process != null)
-            {
-                _windowManager.SetForegroundWindow(character.Process.MainWindowHandle);
+                // TODO: Rework around the windowInfo.rcClient.top offset that doesn't work if window isn't maximized
+                _windowManager.SendLeftClickToWindow(character.Process.MainWindowHandle, e.Data.X, e.Data.Y - windowInfo.rcClient.top);
             }
         }
 
@@ -142,7 +170,7 @@ namespace DofusBuddy.Core
             foreach (Character character in _characterManager.ActiveCharacters.Where(x => !string.IsNullOrEmpty(x.Settings.FocusWindowKeyBinding)))
             {
                 var combination = Combination.FromString(character.Settings.FocusWindowKeyBinding);
-                bindings.Add(new KeyValuePair<Combination, Action>(combination, () => DisplayCharacterWindow(character)));
+                bindings.Add(new KeyValuePair<Combination, Action>(combination, () => _windowManager.SetForegroundWindow(character.Process.MainWindowHandle)));
             }
         }
     }

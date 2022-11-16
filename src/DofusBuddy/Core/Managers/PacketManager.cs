@@ -6,23 +6,28 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using DofusBuddy.Core.GameEvents;
+using Microsoft.Extensions.Caching.Memory;
 using PacketDotNet;
 using SharpPcap;
 using SharpPcap.LibPcap;
 
-namespace DofusBuddy.Core
+namespace DofusBuddy.Core.Managers
 {
     public class PacketManager
     {
-        private const string _galgarionIpAddress = "172.65.204.203";
-        private readonly Regex _fightTurnRegex = new("^GTM.*?GTS(\\d*)\\|");
+        private readonly IMemoryCache _memoryCache;
+        private readonly Regex _fightTurnRegex = new("GTS(\\d*)\\|");
         private readonly Regex _chatMessageRegex = new("^cMK\\|(\\d*)\\|(.*?)\\|(.*?)\\|");
+        private readonly Regex _groupInvitationRegex = new("^PIK(.*?)\\|(.*)\0");
 
         public event EventHandler<FightTurnEventArgs>? FightTurnPacketReceived;
         public event EventHandler<ChatMessageEventArgs>? ChatMessagePacketReceived;
+        public event EventHandler<GroupInvitationEventArgs>? GroupInvitationReceived;
 
-        public PacketManager()
+        public PacketManager(IMemoryCache memoryCache)
         {
+            _memoryCache = memoryCache;
+
             string hostName = Dns.GetHostName();
             IPAddress localNetworkAddress = Dns.GetHostEntry(hostName).AddressList
                 .First(x => x.AddressFamily == AddressFamily.InterNetwork);
@@ -32,6 +37,10 @@ namespace DofusBuddy.Core
                 .First(x => x.Addresses.Any(y => localNetworkAddress.Equals(y.Addr.ipAddress)));
 
             device.Open();
+
+            // TODO: Add other dofus retro servers
+            device.Filter = "ip and tcp and src 172.65.204.203";
+
             device.OnPacketArrival += Device_OnPacketArrival;
             device.StartCapture();
         }
@@ -39,57 +48,40 @@ namespace DofusBuddy.Core
         private void Device_OnPacketArrival(object sender, PacketCapture packetCapture)
         {
             RawCapture packet = packetCapture.GetPacket();
-            if (IsPacketFromDofus(packet, out byte[] data))
-            {
-                OnDofusPacketArrival(data);
-            }
-        }
 
-        private static bool IsPacketFromDofus(RawCapture rawCapture, out byte[] data)
-        {
-            data = Array.Empty<byte>();
-
-            var parsedPacket = Packet.ParsePacket(rawCapture.LinkLayerType, rawCapture.Data);
-            if (parsedPacket is not EthernetPacket)
-            {
-                return false;
-            }
-
-            IPPacket ip = parsedPacket.Extract<IPPacket>();
-            if (ip is null)
-            {
-                return false;
-            }
-
-            if (ip.SourceAddress.ToString() != _galgarionIpAddress)
-            {
-                return false;
-            }
+            var parsedPacket = Packet.ParsePacket(packet.LinkLayerType, packet.Data);
 
             TcpPacket tcp = parsedPacket.Extract<TcpPacket>();
             if (tcp?.PayloadData == null || tcp.PayloadData.Length < 0)
             {
-                return false;
+                return;
             }
 
-            data = tcp.PayloadData;
-
-            return true;
+            OnDofusPacketArrival(tcp.PayloadData);
         }
 
         private void OnDofusPacketArrival(byte[] bytes)
         {
             string data = Encoding.ASCII.GetString(bytes);
 
-            Debug.WriteLine($"packet: {data.Replace("\0", "\\0")}");
+            Debug.WriteLine($"{DateTime.Now:hh:mm:ss.fff} - packet: {data.Replace("\0", "\\0")}");
 
             if (IsGameTurnPacket(data, out FightTurnEventArgs? fightTurnEventArgs))
             {
+                Debug.WriteLine("Invoke FightTurnPacketReceived");
                 FightTurnPacketReceived?.Invoke(this, fightTurnEventArgs!);
             }
             else if (IsChatMessagePacket(data, out ChatMessageEventArgs? chatMessageEventArgs))
             {
+                Debug.WriteLine("Invoke ChatMessagePacketReceived");
                 ChatMessagePacketReceived?.Invoke(this, chatMessageEventArgs!);
+            }
+            else if (IsGroupInvitationPacket(data, out GroupInvitationEventArgs? groupInvitationEventArgs)
+                && !_memoryCache.TryGetValue(nameof(GroupInvitationReceived), out GroupInvitationEventArgs cache))
+            {
+                Debug.WriteLine("Invoke GroupInvitationReceived");
+                GroupInvitationReceived?.Invoke(this, groupInvitationEventArgs!);
+                _memoryCache.Set(nameof(GroupInvitationReceived), groupInvitationEventArgs, DateTimeOffset.Now.AddMilliseconds(250));
             }
         }
 
@@ -114,6 +106,19 @@ namespace DofusBuddy.Core
             if (match.Success)
             {
                 chatMessageEventArgs = new ChatMessageEventArgs(match.Groups[1].Value, match.Groups[2].Value);
+            }
+
+            return match.Success;
+        }
+
+        private bool IsGroupInvitationPacket(string data, out GroupInvitationEventArgs? groupInvitationEventArgs)
+        {
+            groupInvitationEventArgs = null;
+            Match match = _groupInvitationRegex.Match(data);
+
+            if (match.Success)
+            {
+                groupInvitationEventArgs = new GroupInvitationEventArgs(match.Groups[1].Value, match.Groups[2].Value);
             }
 
             return match.Success;

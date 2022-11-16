@@ -1,7 +1,7 @@
 ﻿using Gma.System.MouseKeyHook;
 using SharpHook;
 
-namespace DofusBuddy.Core
+namespace DofusBuddy.Core.Managers
 {
     /// <summary>
     /// - Gma.System.MouseKeyHook to setup keyboards hooks

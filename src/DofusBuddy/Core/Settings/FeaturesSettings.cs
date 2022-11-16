@@ -6,11 +6,10 @@ namespace DofusBuddy.Core.Settings
     public class FeaturesSettings : ObservableObject
     {
         private bool _replicateMouseClicks;
-        private int _replicateMouseClicksDelay = 200;
+        private int _replicateMouseClicksDelay = 150;
         private string? _replicateMouseClicksKeyBinding;
         private bool _autoSwitchOnFightTurn;
-        private bool _autoSwitchOnGroupInvite;
-        private bool _autoSwitchOnTradeInvite;
+        private bool _autoAcceptGroupInvitation;
 
         [JsonIgnore]
         public bool ReplicateMouseClicks
@@ -37,16 +36,10 @@ namespace DofusBuddy.Core.Settings
             set => SetProperty(ref _autoSwitchOnFightTurn, value);
         }
 
-        public bool AutoSwitchOnGroupInvite
+        public bool AutoAcceptGroupInvitation
         {
-            get => _autoSwitchOnGroupInvite;
-            set => SetProperty(ref _autoSwitchOnGroupInvite, value);
-        }
-
-        public bool AutoSwitchOnTradeInvite
-        {
-            get => _autoSwitchOnTradeInvite;
-            set => SetProperty(ref _autoSwitchOnTradeInvite, value);
+            get => _autoAcceptGroupInvitation;
+            set => SetProperty(ref _autoAcceptGroupInvitation, value);
         }
     }
 }
