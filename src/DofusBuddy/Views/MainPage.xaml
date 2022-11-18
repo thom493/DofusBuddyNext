@@ -67,9 +67,18 @@
                         <StackPanel Grid.Column="1"
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right">
+                            <ui:ToggleSwitch Margin="0,0,15,0"
+                                             Background="{StaticResource BrushGreenPantone}"
+                                             IsChecked="{Binding Settings.AutoSkipTurn}">
+                                <ui:SymbolIcon Symbol="HourglassOneQuarter24"
+                                               Margin="-4,0,0,0" />
+                            </ui:ToggleSwitch>
                             <ui:ToggleSwitch Background="{StaticResource BrushGreenPantone}"
                                              Command="{Binding DataContext.ToggleSingleReplicateMouseClicks, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                             IsChecked="{Binding Settings.ReplicateMouseClick}" />
+                                             IsChecked="{Binding Settings.ReplicateMouseClick}">
+                                <ui:SymbolIcon Symbol="Run24"
+                                               Margin="-4,0,0,0" />
+                            </ui:ToggleSwitch>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
@@ -106,16 +115,12 @@
                          FontWeight="SemiBold"
                          Background="{StaticResource BrushGreenPantone}"
                          Content="Switch automatique au début du tour"
-                         Command="{Binding ToggleAutoSwitchOnFightTurnCommand}"
-                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
                          IsChecked="{Binding ApplicationSettings.Features.AutoSwitchOnFightTurn}" />
         <ui:ToggleSwitch Margin="0,8,0,0"
                          FontSize="16"
                          FontWeight="SemiBold"
                          Background="{StaticResource BrushGreenPantone}"
                          Content="Accepter automatiquement les invitations de groupe"
-                         Command="{Binding ToggleAutoAcceptGroupInvitationCommand}"
-                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
                          IsChecked="{Binding ApplicationSettings.Features.AutoAcceptGroupInvitation}" />
     </StackPanel>
 </Page>

@@ -8,10 +8,10 @@ namespace DofusBuddy.Core.Managers
         {
         }
 
-        public void SendReturnKey()
+        public void SendSingleKeyPress(User32.ScanCode scanCode)
         {
             var inputs = new User32.INPUT[]
-            {
+{
                 new User32.INPUT
                 {
                     type = User32.InputType.INPUT_KEYBOARD,
@@ -20,7 +20,7 @@ namespace DofusBuddy.Core.Managers
                         ki = new User32.KEYBDINPUT
                         {
                             wVk = 0,
-                            wScan = User32.ScanCode.RETURN,
+                            wScan = scanCode,
                             dwFlags = User32.KEYEVENTF.KEYEVENTF_SCANCODE
                         }
                     }
@@ -33,12 +33,12 @@ namespace DofusBuddy.Core.Managers
                         ki = new User32.KEYBDINPUT
                         {
                             wVk = 0,
-                            wScan = User32.ScanCode.RETURN,
+                            wScan = scanCode,
                             dwFlags = User32.KEYEVENTF.KEYEVENTF_SCANCODE | User32.KEYEVENTF.KEYEVENTF_KEYUP
                         }
                     }
                 }
-            };
+};
 
             unsafe
             {

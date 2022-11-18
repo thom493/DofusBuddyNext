@@ -34,9 +34,11 @@ namespace DofusBuddy.Core.Managers
             _hookManager = hookManager;
             _packetManager = packetManager;
             _keyboardManager = keyboardManager;
+
+            _packetManager.FightTurnPacketReceived += OnFightTurn;
+            _packetManager.GroupInvitationReceived += OnGroupInvitation;
+
             SetupKeyboardKeybindings();
-            ToggleAutoSwitchOnFightTurn(_applicationSettings.Features.AutoSwitchOnFightTurn);
-            ToggleAutoAcceptGroupInvitation(_applicationSettings.Features.AutoAcceptGroupInvitation);
         }
 
         public void ToggleReplicateMouseClicks(bool enabled)
@@ -70,43 +72,22 @@ namespace DofusBuddy.Core.Managers
             }
         }
 
-        public void ToggleAutoSwitchOnFightTurn(bool enabled)
-        {
-            if (enabled)
-            {
-                _packetManager.FightTurnPacketReceived += OnFightTurn;
-            }
-            else
-            {
-                _packetManager.FightTurnPacketReceived -= OnFightTurn;
-            }
-        }
-
-        public void ToggleAutoAcceptGroupInvitation(bool enabled)
-        {
-            if (enabled)
-            {
-                _packetManager.GroupInvitationReceived += OnGroupInvitation;
-            }
-            else
-            {
-                _packetManager.GroupInvitationReceived -= OnGroupInvitation;
-            }
-        }
-
         private void OnGroupInvitation(object? sender, GroupInvitationEventArgs e)
         {
-            Character? senderCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Name == e.SenderName);
-            Character? receiverCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Name == e.ReceiverName);
-            if (senderCharacter is not null && receiverCharacter is not null)
+            if (_applicationSettings.Features.AutoAcceptGroupInvitation)
             {
-                // Only execute action if both accounts are configured (to avoid accept other player's invitations)
-                // Keyboard inputs can only be reliably sent using User32.SendInput, therefore requiring the window to be on foreground
-                _windowManager.SetForegroundWindow(receiverCharacter.Process.MainWindowHandle);
+                Character? senderCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Name == e.SenderName);
+                Character? receiverCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Name == e.ReceiverName);
+                if (senderCharacter is not null && receiverCharacter is not null)
+                {
+                    // Only execute action if both accounts are configured (to avoid accept other player's invitations)
+                    // Keyboard inputs can only be reliably sent using User32.SendInput, therefore requiring the window to be on foreground
+                    _windowManager.SetForegroundWindow(receiverCharacter.Process.MainWindowHandle);
 
-                _keyboardManager.SendReturnKey();
+                    _keyboardManager.SendSingleKeyPress(User32.ScanCode.RETURN);
 
-                _windowManager.SetForegroundWindow(senderCharacter.Process.MainWindowHandle);
+                    _windowManager.SetForegroundWindow(senderCharacter.Process.MainWindowHandle);
+                }
             }
         }
 
@@ -115,7 +96,16 @@ namespace DofusBuddy.Core.Managers
             Character? character = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Id == e.CharacterId);
             if (character is not null)
             {
-                _windowManager.SetForegroundWindow(character.Process.MainWindowHandle);
+                if (_applicationSettings.Features.AutoSwitchOnFightTurn)
+                {
+                    _windowManager.SetForegroundWindow(character.Process.MainWindowHandle);
+                }
+
+                if (character.Settings.AutoSkipTurn)
+                {
+                    _windowManager.SetForegroundWindow(character.Process.MainWindowHandle);
+                    _keyboardManager.SendSingleKeyPress(User32.ScanCode.SPACE);
+                }
             }
         }
 

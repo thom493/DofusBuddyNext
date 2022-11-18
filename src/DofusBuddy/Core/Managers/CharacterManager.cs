@@ -44,7 +44,7 @@ namespace DofusBuddy.Core.Managers
             }
         }
 
-        private Process? GetCharacterProcess(string? characterName)
+        private static Process? GetCharacterProcess(string? characterName)
         {
             Process? process = Process
                 .GetProcessesByName("Dofus Retro")

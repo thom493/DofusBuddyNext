@@ -12,22 +12,19 @@ namespace DofusBuddy.Core.Managers
         public void SetForegroundWindow(IntPtr windowHandle)
         {
             IntPtr foregroundWindowHandle = User32.GetForegroundWindow();
-            if (windowHandle != foregroundWindowHandle)
-            {
-                int foregroundWindowThreadProcessId = User32.GetWindowThreadProcessId(foregroundWindowHandle, out _);
-                int currentThreadId = Kernel32.GetCurrentThreadId();
+            int foregroundWindowThreadProcessId = User32.GetWindowThreadProcessId(foregroundWindowHandle, out _);
+            int currentThreadId = Kernel32.GetCurrentThreadId();
 
-                // Mandatory to avoid issues regarding User32.SetForegroundWindow limits
-                // see https://learn.microsoft.com/en-gb/windows/win32/api/winuser/nf-winuser-setforegroundwindow?redirectedfrom=MSDN#remarks
-                // https://stackoverflow.com/questions/19136365/win32-setforegroundwindow-not-working-all-the-time
-                User32.AttachThreadInput(foregroundWindowThreadProcessId, currentThreadId, true);
+            // Mandatory to avoid issues regarding User32.SetForegroundWindow limits
+            // see https://learn.microsoft.com/en-gb/windows/win32/api/winuser/nf-winuser-setforegroundwindow?redirectedfrom=MSDN#remarks
+            // https://stackoverflow.com/questions/19136365/win32-setforegroundwindow-not-working-all-the-time
+            User32.AttachThreadInput(foregroundWindowThreadProcessId, currentThreadId, true);
 
-                User32.BringWindowToTop(windowHandle);
-                User32.ShowWindow(windowHandle, User32.WindowShowStyle.SW_SHOW);
+            User32.BringWindowToTop(windowHandle);
+            User32.ShowWindow(windowHandle, User32.WindowShowStyle.SW_SHOWMAXIMIZED);
 
-                // Detach the 2 threads to avoid other potential issues
-                User32.AttachThreadInput(foregroundWindowThreadProcessId, currentThreadId, false);
-            }
+            // Detach the 2 threads to avoid other potential issues
+            User32.AttachThreadInput(foregroundWindowThreadProcessId, currentThreadId, false);
         }
 
         public void SendLeftClickToWindow(IntPtr windowHandle, int x, int y)

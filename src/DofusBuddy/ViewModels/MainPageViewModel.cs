@@ -29,20 +29,6 @@ namespace DofusBuddy.ViewModels
             set => SetProperty(ref _toggleSingleReplicateMouseClicks, value);
         }
 
-        private IRelayCommand<bool> _toggleAutoSwitchOnFightTurnCommand;
-        public IRelayCommand<bool> ToggleAutoSwitchOnFightTurnCommand
-        {
-            get => _toggleAutoSwitchOnFightTurnCommand;
-            set => SetProperty(ref _toggleAutoSwitchOnFightTurnCommand, value);
-        }
-
-        private IRelayCommand<bool> _toggleAutoAcceptGroupInvitationCommand;
-        public IRelayCommand<bool> ToggleAutoAcceptGroupInvitationCommand
-        {
-            get => _toggleAutoAcceptGroupInvitationCommand;
-            set => SetProperty(ref _toggleAutoAcceptGroupInvitationCommand, value);
-        }
-
         private IRelayCommand _displayAddCharacterDialogCommand;
         public IRelayCommand DisplayAddCharacterDialogCommand
         {
@@ -72,8 +58,6 @@ namespace DofusBuddy.ViewModels
             CharacterManager = characterManager;
             ToggleReplicateMouseClicksCommand = new RelayCommand<bool>(x => gameManager.ToggleReplicateMouseClicks(x));
             ToggleSingleReplicateMouseClicks = new RelayCommand(gameManager.ToggleSingleReplicateMouseClicks);
-            ToggleAutoSwitchOnFightTurnCommand = new RelayCommand<bool>(x => gameManager.ToggleAutoSwitchOnFightTurn(x));
-            ToggleAutoAcceptGroupInvitationCommand = new RelayCommand<bool>(x => gameManager.ToggleAutoAcceptGroupInvitation(x));
             DisplayAddCharacterDialogCommand = new RelayCommand(() => _serviceProvider.GetService<AddCharacterView>().Show());
             RefreshActiveCharactersCommand = new RelayCommand(characterManager.RefreshActiveCharacters);
         }

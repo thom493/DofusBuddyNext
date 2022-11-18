@@ -9,6 +9,7 @@ namespace DofusBuddy.Core.Settings
         private string? _name;
         private string? _focusWindowKeyBinding;
         private bool _replicateMouseClick;
+        private bool _autoSkipTurn;
 
         public string? Id
         {
@@ -26,6 +27,12 @@ namespace DofusBuddy.Core.Settings
         {
             get => _focusWindowKeyBinding;
             set => SetProperty(ref _focusWindowKeyBinding, value);
+        }
+
+        public bool AutoSkipTurn
+        {
+            get => _autoSkipTurn;
+            set => SetProperty(ref _autoSkipTurn, value);
         }
 
         [JsonIgnore]
