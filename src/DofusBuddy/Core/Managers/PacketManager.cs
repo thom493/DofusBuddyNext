@@ -6,7 +6,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using DofusBuddy.Core.GameEvents;
-using Microsoft.Extensions.Caching.Memory;
 using PacketDotNet;
 using SharpPcap;
 using SharpPcap.LibPcap;
@@ -15,19 +14,18 @@ namespace DofusBuddy.Core.Managers
 {
     public class PacketManager
     {
-        private readonly IMemoryCache _memoryCache;
         private readonly Regex _fightTurnRegex = new("GTS(\\d*)\\|");
         private readonly Regex _chatMessageRegex = new("^cMK\\|(\\d*)\\|(.*?)\\|(.*?)\\|");
         private readonly Regex _groupInvitationRegex = new("^PIK(.*?)\\|(.*)\0");
+
+        private DateTimeOffset _lastGroupInvitationInvoked = DateTimeOffset.Now;
 
         public event EventHandler<FightTurnEventArgs>? FightTurnPacketReceived;
         public event EventHandler<ChatMessageEventArgs>? ChatMessagePacketReceived;
         public event EventHandler<GroupInvitationEventArgs>? GroupInvitationReceived;
 
-        public PacketManager(IMemoryCache memoryCache)
+        public PacketManager()
         {
-            _memoryCache = memoryCache;
-
             string hostName = Dns.GetHostName();
             IPAddress localNetworkAddress = Dns.GetHostEntry(hostName).AddressList
                 .First(x => x.AddressFamily == AddressFamily.InterNetwork);
@@ -77,11 +75,11 @@ namespace DofusBuddy.Core.Managers
                 ChatMessagePacketReceived?.Invoke(this, chatMessageEventArgs!);
             }
             else if (IsGroupInvitationPacket(data, out GroupInvitationEventArgs? groupInvitationEventArgs)
-                && !_memoryCache.TryGetValue(nameof(GroupInvitationReceived), out GroupInvitationEventArgs cache))
+                && _lastGroupInvitationInvoked.AddMilliseconds(250) < DateTimeOffset.Now)
             {
                 Debug.WriteLine("Invoke GroupInvitationReceived");
                 GroupInvitationReceived?.Invoke(this, groupInvitationEventArgs!);
-                _memoryCache.Set(nameof(GroupInvitationReceived), groupInvitationEventArgs, DateTimeOffset.Now.AddMilliseconds(250));
+                _lastGroupInvitationInvoked = DateTimeOffset.Now;
             }
         }
 

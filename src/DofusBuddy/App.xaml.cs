@@ -90,8 +90,6 @@ namespace DofusBuddy
 
             services.Configure<ApplicationSettings>(configuration.GetSection(nameof(ApplicationSettings)));
 
-            services.AddMemoryCache();
-
             services.AddTransient<MainWindow>();
             services.AddTransient<MainPage>();
             services.AddTransient<AddCharacterView>();
