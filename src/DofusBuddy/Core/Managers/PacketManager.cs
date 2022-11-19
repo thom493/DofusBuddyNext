@@ -68,8 +68,7 @@ namespace DofusBuddy.Core.Managers
 
             Debug.WriteLine($"{DateTime.Now:hh:mm:ss.fff} - packet: {data.Replace("\0", "\\0")}");
 
-            if (IsGameTurnPacket(data, out FightTurnEventArgs? fightTurnEventArgs)
-                && _lastFightTurnPacketReceived == data)
+            if (IsGameTurnPacket(data, out FightTurnEventArgs? fightTurnEventArgs) && _lastFightTurnPacketReceived != data)
             {
                 Debug.WriteLine("Invoke FightTurnPacketReceived");
                 FightTurnPacketReceived?.Invoke(this, fightTurnEventArgs!);
