@@ -12,19 +12,19 @@
              MinWidth="300"
              Width="300"
              MinHeight="400"
-             Title="Détection des personnages"
+             Title="Character detection"
              ExtendsContentIntoTitleBar="True"
              Background="{ui:ThemeResource ApplicationBackgroundBrush}"
              Topmost="True">
     <StackPanel Orientation="Vertical">
         <ui:TitleBar FontWeight="Bold"
-                     Title="Détection des personnages"
+                     Title="Character detection"
                      Icon="/Resources/dofus-buddy.ico"
                      ShowMaximize="False"
                      ShowMinimize="False" />
         <Separator />
         <TextBlock Margin="8"
-                   Text="Pour qu'un personnage soit détecté celui-ci doit écrire un message dans le chat du jeu"
+                   Text="For a character to be detected, he must write a message in the game chat"
                    FontSize="16"
                    TextAlignment="Center"
                    FontWeight="SemiBold"

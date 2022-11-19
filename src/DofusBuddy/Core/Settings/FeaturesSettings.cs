@@ -10,6 +10,7 @@ namespace DofusBuddy.Core.Settings
         private string? _replicateMouseClicksKeyBinding;
         private bool _autoSwitchOnFightTurn;
         private bool _autoAcceptGroupInvitation;
+        private bool _autoAcceptTradeInvitation;
 
         [JsonIgnore]
         public bool ReplicateMouseClicks
@@ -40,6 +41,12 @@ namespace DofusBuddy.Core.Settings
         {
             get => _autoAcceptGroupInvitation;
             set => SetProperty(ref _autoAcceptGroupInvitation, value);
+        }
+
+        public bool AutoAcceptTradeInvitation
+        {
+            get => _autoAcceptTradeInvitation;
+            set => SetProperty(ref _autoAcceptTradeInvitation, value);
         }
     }
 }

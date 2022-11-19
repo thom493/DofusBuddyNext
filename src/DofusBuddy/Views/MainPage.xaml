@@ -22,7 +22,7 @@
                        VerticalAlignment="Center"
                        FontSize="20"
                        FontWeight="SemiBold"
-                       Text="Personnages actifs"
+                       Text="Active characters"
                        Foreground="{StaticResource BrushVioletBlueCrayola}" />
             <StackPanel Grid.Column="1"
                         Orientation="Horizontal">
@@ -31,14 +31,14 @@
                            FontSize="20"
                            Padding="4"
                            Icon="ArrowSync24"
-                           ToolTip="Rafraichir les personnages actifs"
+                           ToolTip="Refresh active characters"
                            Command="{Binding RefreshActiveCharactersCommand}" />
                 <ui:Button Grid.Column="1"
                            Margin="4,0,0,0"
                            FontSize="20"
                            Padding="4"
                            Icon="AddCircle24"
-                           ToolTip="Ajouter des personnages"
+                           ToolTip="Add characters"
                            Command="{Binding DisplayAddCharacterDialogCommand}" />
             </StackPanel>
             <Rectangle Grid.Column="2"
@@ -76,7 +76,7 @@
                             <ui:ToggleSwitch Background="{StaticResource BrushGreenPantone}"
                                              Command="{Binding DataContext.ToggleSingleReplicateMouseClicks, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                              IsChecked="{Binding Settings.ReplicateMouseClick}">
-                                <ui:SymbolIcon Symbol="Run24"
+                                <ui:SymbolIcon Symbol="CursorClick24"
                                                Margin="-4,0,0,0" />
                             </ui:ToggleSwitch>
                         </StackPanel>
@@ -94,7 +94,7 @@
                        HorizontalAlignment="Left"
                        FontSize="20"
                        FontWeight="SemiBold"
-                       Text="Fonctionnalités"
+                       Text="Features"
                        Foreground="{StaticResource BrushVioletBlueCrayola}">
             </TextBlock>
             <Rectangle Grid.Column="1"
@@ -106,7 +106,7 @@
                          FontSize="16"
                          FontWeight="SemiBold"
                          Background="{StaticResource BrushGreenPantone}"
-                         Content="Réplication des clics"
+                         Content="Replicate clicks"
                          Command="{Binding ToggleReplicateMouseClicksCommand}"
                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
                          IsChecked="{Binding ApplicationSettings.Features.ReplicateMouseClicks}" />
@@ -114,13 +114,19 @@
                          FontSize="16"
                          FontWeight="SemiBold"
                          Background="{StaticResource BrushGreenPantone}"
-                         Content="Switch automatique au début du tour"
+                         Content="Auto-switch on fight turn"
                          IsChecked="{Binding ApplicationSettings.Features.AutoSwitchOnFightTurn}" />
         <ui:ToggleSwitch Margin="0,8,0,0"
                          FontSize="16"
                          FontWeight="SemiBold"
                          Background="{StaticResource BrushGreenPantone}"
-                         Content="Accepter automatiquement les invitations de groupe"
+                         Content="Auto-accept group invites"
                          IsChecked="{Binding ApplicationSettings.Features.AutoAcceptGroupInvitation}" />
+        <ui:ToggleSwitch Margin="0,8,0,0"
+                         FontSize="16"
+                         FontWeight="SemiBold"
+                         Background="{StaticResource BrushGreenPantone}"
+                         Content="Auto-accept trade invites"
+                         IsChecked="{Binding ApplicationSettings.Features.AutoAcceptTradeInvitation}" />
     </StackPanel>
 </Page>

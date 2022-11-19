@@ -17,12 +17,16 @@ namespace DofusBuddy.Core.Managers
         private readonly Regex _fightTurnRegex = new("GTS(\\d*)\\|");
         private readonly Regex _chatMessageRegex = new("^cMK\\|(\\d*)\\|(.*?)\\|(.*?)\\|");
         private readonly Regex _groupInvitationRegex = new("^PIK(.*?)\\|(.*)\0");
+        private readonly Regex _tradeInvitationRegex = new("^ERK(.*?)\\|(.*)\\|1");
 
         private DateTimeOffset _lastGroupInvitationInvoked = DateTimeOffset.Now;
+        private DateTimeOffset _lastTradeInvitationInvoked = DateTimeOffset.Now;
+        private string _lastFightTurnPacketReceived;
 
         public event EventHandler<FightTurnEventArgs>? FightTurnPacketReceived;
         public event EventHandler<ChatMessageEventArgs>? ChatMessagePacketReceived;
         public event EventHandler<GroupInvitationEventArgs>? GroupInvitationReceived;
+        public event EventHandler<TradeInvitationEventArgs>? TradeInvitationReceived;
 
         public PacketManager()
         {
@@ -64,10 +68,12 @@ namespace DofusBuddy.Core.Managers
 
             Debug.WriteLine($"{DateTime.Now:hh:mm:ss.fff} - packet: {data.Replace("\0", "\\0")}");
 
-            if (IsGameTurnPacket(data, out FightTurnEventArgs? fightTurnEventArgs))
+            if (IsGameTurnPacket(data, out FightTurnEventArgs? fightTurnEventArgs)
+                && _lastFightTurnPacketReceived == data)
             {
                 Debug.WriteLine("Invoke FightTurnPacketReceived");
                 FightTurnPacketReceived?.Invoke(this, fightTurnEventArgs!);
+                _lastFightTurnPacketReceived = data;
             }
             else if (IsChatMessagePacket(data, out ChatMessageEventArgs? chatMessageEventArgs))
             {
@@ -80,6 +86,13 @@ namespace DofusBuddy.Core.Managers
                 Debug.WriteLine("Invoke GroupInvitationReceived");
                 GroupInvitationReceived?.Invoke(this, groupInvitationEventArgs!);
                 _lastGroupInvitationInvoked = DateTimeOffset.Now;
+            }
+            else if (IsTradeInvitationPacket(data, out TradeInvitationEventArgs? tradeInvitationEventArgs)
+                && _lastTradeInvitationInvoked.AddMilliseconds(250) < DateTimeOffset.Now)
+            {
+                Debug.WriteLine("Invoke TradeInvitationReceived");
+                TradeInvitationReceived?.Invoke(this, tradeInvitationEventArgs!);
+                _lastTradeInvitationInvoked = DateTimeOffset.Now;
             }
         }
 
@@ -117,6 +130,19 @@ namespace DofusBuddy.Core.Managers
             if (match.Success)
             {
                 groupInvitationEventArgs = new GroupInvitationEventArgs(match.Groups[1].Value, match.Groups[2].Value);
+            }
+
+            return match.Success;
+        }
+
+        private bool IsTradeInvitationPacket(string data, out TradeInvitationEventArgs? tradeInvitationEventArgs)
+        {
+            tradeInvitationEventArgs = null;
+            Match match = _tradeInvitationRegex.Match(data);
+
+            if (match.Success)
+            {
+                tradeInvitationEventArgs = new TradeInvitationEventArgs(match.Groups[1].Value, match.Groups[2].Value);
             }
 
             return match.Success;

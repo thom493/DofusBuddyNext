@@ -37,6 +37,7 @@ namespace DofusBuddy.Core.Managers
 
             _packetManager.FightTurnPacketReceived += OnFightTurn;
             _packetManager.GroupInvitationReceived += OnGroupInvitation;
+            _packetManager.TradeInvitationReceived += OnTradeInvitation;
 
             SetupKeyboardKeybindings();
         }
@@ -78,16 +79,17 @@ namespace DofusBuddy.Core.Managers
             {
                 Character? senderCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Name == e.SenderName);
                 Character? receiverCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Name == e.ReceiverName);
-                if (senderCharacter is not null && receiverCharacter is not null)
-                {
-                    // Only execute action if both accounts are configured (to avoid accept other player's invitations)
-                    // Keyboard inputs can only be reliably sent using User32.SendInput, therefore requiring the window to be on foreground
-                    _windowManager.SetForegroundWindow(receiverCharacter.Process.MainWindowHandle);
+                SwitchBetweenCharactersAndPressEnter(senderCharacter, receiverCharacter);
+            }
+        }
 
-                    _keyboardManager.SendSingleKeyPress(User32.ScanCode.RETURN);
-
-                    _windowManager.SetForegroundWindow(senderCharacter.Process.MainWindowHandle);
-                }
+        private void OnTradeInvitation(object? sender, TradeInvitationEventArgs e)
+        {
+            if (_applicationSettings.Features.AutoAcceptTradeInvitation)
+            {
+                Character? senderCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Id == e.SenderId);
+                Character? receiverCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Id == e.ReceiverId);
+                SwitchBetweenCharactersAndPressEnter(senderCharacter, receiverCharacter);
             }
         }
 
@@ -106,6 +108,20 @@ namespace DofusBuddy.Core.Managers
                     _windowManager.SetForegroundWindow(character.Process.MainWindowHandle);
                     _keyboardManager.SendSingleKeyPress(User32.ScanCode.SPACE);
                 }
+            }
+        }
+
+        private void SwitchBetweenCharactersAndPressEnter(Character? senderCharacter, Character? receiverCharacter)
+        {
+            if (senderCharacter is not null && receiverCharacter is not null)
+            {
+                // Only execute action if both accounts are configured (to avoid accept other player's invitations)
+                // Keyboard inputs can only be reliably sent using User32.SendInput, therefore requiring the window to be on foreground
+                _windowManager.SetForegroundWindow(receiverCharacter.Process.MainWindowHandle);
+
+                _keyboardManager.SendSingleKeyPress(User32.ScanCode.RETURN);
+
+                _windowManager.SetForegroundWindow(senderCharacter.Process.MainWindowHandle);
             }
         }
 
