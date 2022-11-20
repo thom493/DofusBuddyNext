@@ -79,7 +79,11 @@ namespace DofusBuddy.Core.Managers
             {
                 Character? senderCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Name == e.SenderName);
                 Character? receiverCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Name == e.ReceiverName);
-                SwitchBetweenCharactersAndPressEnter(senderCharacter, receiverCharacter);
+
+                if (senderCharacter is not null && receiverCharacter is not null)
+                {
+                    ClickOnAcceptButton(receiverCharacter);
+                }
             }
         }
 
@@ -89,7 +93,11 @@ namespace DofusBuddy.Core.Managers
             {
                 Character? senderCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Id == e.SenderId);
                 Character? receiverCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Id == e.ReceiverId);
-                SwitchBetweenCharactersAndPressEnter(senderCharacter, receiverCharacter);
+
+                if (senderCharacter is not null && receiverCharacter is not null)
+                {
+                    ClickOnAcceptButton(receiverCharacter);
+                }
             }
         }
 
@@ -111,18 +119,18 @@ namespace DofusBuddy.Core.Managers
             }
         }
 
-        private void SwitchBetweenCharactersAndPressEnter(Character? senderCharacter, Character? receiverCharacter)
+        private void ClickOnAcceptButton(Character receiverCharacter)
         {
-            if (senderCharacter is not null && receiverCharacter is not null)
-            {
-                // Only execute action if both accounts are configured (to avoid accept other player's invitations)
-                // Keyboard inputs can only be reliably sent using User32.SendInput, therefore requiring the window to be on foreground
-                _windowManager.SetForegroundWindow(receiverCharacter.Process.MainWindowHandle);
+            var windowInfo = new User32.WINDOWINFO();
+            User32.GetWindowInfo(receiverCharacter.Process.MainWindowHandle, ref windowInfo);
 
-                _keyboardManager.SendSingleKeyPress(User32.ScanCode.RETURN);
+            int windowX = windowInfo.rcClient.right - windowInfo.rcClient.left;
+            int windowY = windowInfo.rcClient.bottom - windowInfo.rcClient.top;
 
-                _windowManager.SetForegroundWindow(senderCharacter.Process.MainWindowHandle);
-            }
+            // Accept button positon: 50.78% of X axis, 40,27% of Y axis
+            int acceptButtonX = (int)(windowX * 0.5078) + windowInfo.rcClient.left;
+            int acceptButtonY = (int)(windowY * 0.4027) + windowInfo.rcClient.top;
+            _windowManager.SendLeftClickToWindow(receiverCharacter.Process.MainWindowHandle, acceptButtonX, acceptButtonY);
         }
 
         private async void OnGameWindowClick(object? sender, MouseHookEventArgs e)
@@ -146,8 +154,7 @@ namespace DofusBuddy.Core.Managers
             foreach (Character character in _characterManager.ActiveCharacters.Where(x => x.Settings.ReplicateMouseClick && x.Settings.Name != foregroundCharacter.Settings.Name))
             {
                 await Task.Delay(_applicationSettings.Features.ReplicateMouseClicksDelay);
-                // TODO: Rework around the windowInfo.rcClient.top offset that doesn't work if window isn't maximized
-                _windowManager.SendLeftClickToWindow(character.Process.MainWindowHandle, e.Data.X, e.Data.Y - windowInfo.rcClient.top);
+                _windowManager.SendLeftClickToWindow(character.Process.MainWindowHandle, e.Data.X - windowInfo.rcClient.left, e.Data.Y - windowInfo.rcClient.top);
             }
         }
 
