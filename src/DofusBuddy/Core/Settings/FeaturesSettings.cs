@@ -5,30 +5,37 @@ namespace DofusBuddy.Core.Settings
 {
     public class FeaturesSettings : ObservableObject
     {
-        private bool _replicateMouseClicks;
-        private int _replicateMouseClicksDelay = 150;
+        private bool _replicateLeftMouseClicks;
+        private int _replicateLeftMouseClicksDelay = 150;
         private string? _replicateMouseClicksKeyBinding;
+        private bool _leftMouseClickOnWheelClick;
         private bool _autoSwitchOnFightTurn;
         private bool _autoAcceptGroupInvitation;
         private bool _autoAcceptTradeInvitation;
 
         [JsonIgnore]
-        public bool ReplicateMouseClicks
+        public bool ReplicateLeftMouseClicks
         {
-            get => _replicateMouseClicks;
-            set => SetProperty(ref _replicateMouseClicks, value);
+            get => _replicateLeftMouseClicks;
+            set => SetProperty(ref _replicateLeftMouseClicks, value);
         }
 
-        public int ReplicateMouseClicksDelay
+        public int ReplicateLeftMouseClicksDelay
         {
-            get => _replicateMouseClicksDelay;
-            set => SetProperty(ref _replicateMouseClicksDelay, value);
+            get => _replicateLeftMouseClicksDelay;
+            set => SetProperty(ref _replicateLeftMouseClicksDelay, value);
         }
 
         public string? ReplicateMouseClicksKeyBinding
         {
             get => _replicateMouseClicksKeyBinding;
             set => SetProperty(ref _replicateMouseClicksKeyBinding, value);
+        }
+
+        public bool LeftMouseClickOnWheelClick
+        {
+            get => _leftMouseClickOnWheelClick;
+            set => SetProperty(ref _leftMouseClickOnWheelClick, value);
         }
 
         public bool AutoSwitchOnFightTurn

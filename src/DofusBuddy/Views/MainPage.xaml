@@ -7,7 +7,7 @@
       xmlns:vm="clr-namespace:DofusBuddy.ViewModels"
       Title="MainPage"
       d:DataContext="{d:DesignInstance vm:MainPageViewModel}"
-      d:DesignHeight="450"
+      d:DesignHeight="500"
       d:DesignWidth="800"
       mc:Ignorable="d">
     <StackPanel>
@@ -30,14 +30,14 @@
                            Margin="4,0,0,0"
                            FontSize="20"
                            Padding="4"
-                           Icon="ArrowSync24"
+                           Icon="PeopleSync20"
                            ToolTip="Refresh active characters"
                            Command="{Binding RefreshActiveCharactersCommand}" />
                 <ui:Button Grid.Column="1"
                            Margin="4,0,0,0"
                            FontSize="20"
                            Padding="4"
-                           Icon="AddCircle24"
+                           Icon="PeopleAdd24"
                            ToolTip="Add characters"
                            Command="{Binding DisplayAddCharacterDialogCommand}" />
             </StackPanel>
@@ -102,31 +102,69 @@
                        Height="1"
                        Fill="{StaticResource BrushVioletBlueCrayola}" />
         </Grid>
-        <ui:ToggleSwitch Margin="0,8,0,0"
-                         FontSize="16"
-                         FontWeight="SemiBold"
-                         Background="{StaticResource BrushGreenPantone}"
-                         Content="Replicate clicks"
-                         Command="{Binding ToggleReplicateMouseClicksCommand}"
-                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
-                         IsChecked="{Binding ApplicationSettings.Features.ReplicateMouseClicks}" />
-        <ui:ToggleSwitch Margin="0,8,0,0"
-                         FontSize="16"
-                         FontWeight="SemiBold"
-                         Background="{StaticResource BrushGreenPantone}"
-                         Content="Auto-switch on fight turn"
-                         IsChecked="{Binding ApplicationSettings.Features.AutoSwitchOnFightTurn}" />
-        <ui:ToggleSwitch Margin="0,8,0,0"
-                         FontSize="16"
-                         FontWeight="SemiBold"
-                         Background="{StaticResource BrushGreenPantone}"
-                         Content="Auto-accept group invites"
-                         IsChecked="{Binding ApplicationSettings.Features.AutoAcceptGroupInvitation}" />
-        <ui:ToggleSwitch Margin="0,8,0,0"
-                         FontSize="16"
-                         FontWeight="SemiBold"
-                         Background="{StaticResource BrushGreenPantone}"
-                         Content="Auto-accept trade invites"
-                         IsChecked="{Binding ApplicationSettings.Features.AutoAcceptTradeInvitation}" />
+        <StackPanel Margin="0,8,0,0"
+                    Orientation="Horizontal">
+            <ui:ToggleSwitch FontSize="16"
+                             FontWeight="SemiBold"
+                             Background="{StaticResource BrushGreenPantone}"
+                             Command="{Binding ToggleReplicateMouseClicksCommand}"
+                             CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
+                             IsChecked="{Binding ApplicationSettings.Features.ReplicateLeftMouseClicks}" />
+            <ui:SymbolIcon Margin="8,0,8,0"
+                           Symbol="CursorClick24"
+                           FontSize="24"
+                           ToolTip="On mouse left click, replicate to every game window with a delay" />
+            <ui:NumberBox IntegersOnly="True"
+                          Step="10"
+                          ClearButtonEnabled="False"
+                          IsReadOnly="True"
+                          Text="{Binding ApplicationSettings.Features.ReplicateLeftMouseClicksDelay}" />
+        </StackPanel>
+        <StackPanel Margin="0,8,0,0"
+                    Orientation="Horizontal">
+            <ui:ToggleSwitch FontSize="16"
+                             FontWeight="SemiBold"
+                             Background="{StaticResource BrushGreenPantone}"
+                             IsChecked="{Binding ApplicationSettings.Features.LeftMouseClickOnWheelClick}" />
+            <ui:SymbolIcon Margin="8,0,0,0"
+                           Symbol="PhoneVerticalScroll24"
+                           FontSize="24"
+                           ToolTip="On mouse wheel click, send left click to every game window with no delay" />
+        </StackPanel>
+        <StackPanel Margin="0,8,0,0"
+                    Orientation="Horizontal">
+            <ui:ToggleSwitch FontSize="16"
+                             FontWeight="SemiBold"
+                             Background="{StaticResource BrushGreenPantone}"
+                             IsChecked="{Binding ApplicationSettings.Features.AutoSwitchOnFightTurn}" />
+            <ui:SymbolIcon Margin="8,0,0,0"
+                           Symbol="PeopleSync20"
+                           FontSize="24"
+                           ToolTip="Automatically switch active window to the corresponding character on fight turn" />
+        </StackPanel>
+        <StackPanel Margin="0,8,0,0"
+                    Orientation="Horizontal">
+            <ui:ToggleSwitch Margin="0,8,0,0"
+                             FontSize="16"
+                             FontWeight="SemiBold"
+                             Background="{StaticResource BrushGreenPantone}"
+                             IsChecked="{Binding ApplicationSettings.Features.AutoAcceptGroupInvitation}" />
+            <ui:SymbolIcon Margin="8,0,0,0"
+                           Symbol="PeopleAdd24"
+                           FontSize="24"
+                           ToolTip="Automatically accept group invitations from your characters" />
+        </StackPanel>
+        <StackPanel Margin="0,8,0,0"
+                    Orientation="Horizontal">
+            <ui:ToggleSwitch Margin="0,8,0,0"
+                             FontSize="16"
+                             FontWeight="SemiBold"
+                             Background="{StaticResource BrushGreenPantone}"
+                             IsChecked="{Binding ApplicationSettings.Features.AutoAcceptTradeInvitation}" />
+            <ui:SymbolIcon Margin="8,0,0,0"
+                           Symbol="Backpack24"
+                           FontSize="24"
+                           ToolTip="Automatically accept trade invitations from your characters" />
+        </StackPanel>
     </StackPanel>
 </Page>

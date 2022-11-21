@@ -38,6 +38,7 @@ namespace DofusBuddy.Core.Managers
             _packetManager.FightTurnPacketReceived += OnFightTurn;
             _packetManager.GroupInvitationReceived += OnGroupInvitation;
             _packetManager.TradeInvitationReceived += OnTradeInvitation;
+            _hookManager.GlobalHook.MouseClicked += OnMouseClick;
 
             SetupKeyboardKeybindings();
         }
@@ -48,29 +49,11 @@ namespace DofusBuddy.Core.Managers
             {
                 character.Settings.ReplicateMouseClick = enabled;
             }
-
-            if (enabled)
-            {
-                _hookManager.GlobalHook.MouseClicked += OnGameWindowClick;
-            }
-            else
-            {
-                _hookManager.GlobalHook.MouseClicked -= OnGameWindowClick;
-            }
         }
 
         public void ToggleSingleReplicateMouseClicks()
         {
-            if (_applicationSettings.Characters.Any(x => x.ReplicateMouseClick) && !_applicationSettings.Features.ReplicateMouseClicks)
-            {
-                _applicationSettings.Features.ReplicateMouseClicks = true;
-                _hookManager.GlobalHook.MouseClicked += OnGameWindowClick;
-            }
-            else if (_applicationSettings.Characters.All(x => !x.ReplicateMouseClick) && _applicationSettings.Features.ReplicateMouseClicks)
-            {
-                _applicationSettings.Features.ReplicateMouseClicks = false;
-                _hookManager.GlobalHook.MouseClicked -= OnGameWindowClick;
-            }
+            _applicationSettings.Features.ReplicateLeftMouseClicks = _applicationSettings.Characters.Any(x => x.ReplicateMouseClick);
         }
 
         private void OnGroupInvitation(object? sender, GroupInvitationEventArgs e)
@@ -133,29 +116,61 @@ namespace DofusBuddy.Core.Managers
             _windowManager.SendLeftClickToWindow(receiverCharacter.Process.MainWindowHandle, acceptButtonX, acceptButtonY);
         }
 
-        private async void OnGameWindowClick(object? sender, MouseHookEventArgs e)
+        private async void OnMouseClick(object? sender, MouseHookEventArgs e)
         {
-            if (e.Data.Button != SharpHook.Native.MouseButton.Button1)
+            if (e.Data.Button == SharpHook.Native.MouseButton.Button1)
             {
-                // Mouse click isn't on left mouse button
+                await ReplicateMouseClickOnSpecificCharactersWithDelay(e.Data.X, e.Data.Y);
+            }
+            else if (e.Data.Button == SharpHook.Native.MouseButton.Button3)
+            {
+                ReplicateMouseClickOnEveryCharacterWithoutDelay(e.Data.X, e.Data.Y);
+            }
+        }
+
+        private async Task ReplicateMouseClickOnSpecificCharactersWithDelay(int x, int y)
+        {
+            if (!_applicationSettings.Features.ReplicateLeftMouseClicks)
+            {
                 return;
             }
 
-            Character? foregroundCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Process.MainWindowHandle == User32.GetForegroundWindow());
-            if (foregroundCharacter is null)
+            if (!IsForegroundWindowDofus(out Character foregroundCharacter))
             {
-                // The foreground window isn't dofus
                 return;
             }
 
-            var windowInfo = new User32.WINDOWINFO();
-            User32.GetWindowInfo(foregroundCharacter.Process.MainWindowHandle, ref windowInfo);
-
-            foreach (Character character in _characterManager.ActiveCharacters.Where(x => x.Settings.ReplicateMouseClick && x.Settings.Name != foregroundCharacter.Settings.Name))
+            User32.WINDOWINFO windowInfo = _windowManager.GetWindowInfo(foregroundCharacter.Process.MainWindowHandle);
+            foreach (Character character in _characterManager.ActiveCharacters.Where(x => x.Settings.ReplicateMouseClick && x.Settings.Id != foregroundCharacter.Settings.Id))
             {
-                await Task.Delay(_applicationSettings.Features.ReplicateMouseClicksDelay);
-                _windowManager.SendLeftClickToWindow(character.Process.MainWindowHandle, e.Data.X - windowInfo.rcClient.left, e.Data.Y - windowInfo.rcClient.top);
+                await Task.Delay(_applicationSettings.Features.ReplicateLeftMouseClicksDelay);
+                _windowManager.SendLeftClickToWindow(character.Process.MainWindowHandle, x - windowInfo.rcClient.left, y - windowInfo.rcClient.top);
             }
+        }
+
+        private void ReplicateMouseClickOnEveryCharacterWithoutDelay(int x, int y)
+        {
+            if (!_applicationSettings.Features.LeftMouseClickOnWheelClick)
+            {
+                return;
+            }
+
+            if (!IsForegroundWindowDofus(out Character foregroundCharacter))
+            {
+                return;
+            }
+
+            User32.WINDOWINFO windowInfo = _windowManager.GetWindowInfo(foregroundCharacter.Process.MainWindowHandle);
+            foreach (Character character in _characterManager.ActiveCharacters)
+            {
+                _windowManager.SendLeftClickToWindow(character.Process.MainWindowHandle, x - windowInfo.rcClient.left, y - windowInfo.rcClient.top);
+            }
+        }
+
+        private bool IsForegroundWindowDofus(out Character foregroundCharacter)
+        {
+            foregroundCharacter = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Process.MainWindowHandle == User32.GetForegroundWindow());
+            return foregroundCharacter is not null;
         }
 
         private void SetupKeyboardKeybindings()
@@ -173,8 +188,8 @@ namespace DofusBuddy.Core.Managers
 
             void action()
             {
-                _applicationSettings.Features.ReplicateMouseClicks = !_applicationSettings.Features.ReplicateMouseClicks;
-                ToggleReplicateMouseClicks(_applicationSettings.Features.ReplicateMouseClicks);
+                _applicationSettings.Features.ReplicateLeftMouseClicks = !_applicationSettings.Features.ReplicateLeftMouseClicks;
+                ToggleReplicateMouseClicks(_applicationSettings.Features.ReplicateLeftMouseClicks);
             }
         }
 

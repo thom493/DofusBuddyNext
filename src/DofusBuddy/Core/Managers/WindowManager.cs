@@ -36,5 +36,12 @@ namespace DofusBuddy.Core.Managers
             User32.SendMessage(windowHandle, User32.WindowMessage.WM_LBUTTONDOWN, new IntPtr(0x0001), lParam);
             User32.SendMessage(windowHandle, User32.WindowMessage.WM_LBUTTONUP, new IntPtr(0x0000), lParam);
         }
+
+        public User32.WINDOWINFO GetWindowInfo(IntPtr windowHandle)
+        {
+            var windowInfo = new User32.WINDOWINFO();
+            User32.GetWindowInfo(windowHandle, ref windowInfo);
+            return windowInfo;
+        }
     }
 }
