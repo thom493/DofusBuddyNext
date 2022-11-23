@@ -56,7 +56,7 @@ namespace DofusBuddy.Core.Managers
             _applicationSettings.Features.ReplicateLeftMouseClicks = _applicationSettings.Characters.Any(x => x.ReplicateMouseClick);
         }
 
-        private void OnGroupInvitation(object? sender, GroupInvitationEventArgs e)
+        private async void OnGroupInvitation(object? sender, GroupInvitationEventArgs e)
         {
             if (_applicationSettings.Features.AutoAcceptGroupInvitation)
             {
@@ -65,12 +65,13 @@ namespace DofusBuddy.Core.Managers
 
                 if (senderCharacter is not null && receiverCharacter is not null)
                 {
+                    await Task.Delay(250);
                     ClickOnAcceptButton(receiverCharacter);
                 }
             }
         }
 
-        private void OnTradeInvitation(object? sender, TradeInvitationEventArgs e)
+        private async void OnTradeInvitation(object? sender, TradeInvitationEventArgs e)
         {
             if (_applicationSettings.Features.AutoAcceptTradeInvitation)
             {
@@ -79,6 +80,7 @@ namespace DofusBuddy.Core.Managers
 
                 if (senderCharacter is not null && receiverCharacter is not null)
                 {
+                    await Task.Delay(250);
                     ClickOnAcceptButton(receiverCharacter);
                 }
             }
@@ -110,9 +112,9 @@ namespace DofusBuddy.Core.Managers
             int windowX = windowInfo.rcClient.right - windowInfo.rcClient.left;
             int windowY = windowInfo.rcClient.bottom - windowInfo.rcClient.top;
 
-            // Accept button positon: 50.78% of X axis, 40,27% of Y axis
-            int acceptButtonX = (int)(windowX * 0.5078) + windowInfo.rcClient.left;
-            int acceptButtonY = (int)(windowY * 0.4027) + windowInfo.rcClient.top;
+            // Accept button positon: 43.75% of X axis, 43,75% of Y axis
+            int acceptButtonX = (int)(windowX * 0.4375);
+            int acceptButtonY = (int)(windowY * 0.4375);
             _windowManager.SendLeftClickToWindow(receiverCharacter.Process.MainWindowHandle, acceptButtonX, acceptButtonY);
         }
 
