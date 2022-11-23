@@ -41,7 +41,7 @@ namespace DofusBuddy.Core.Managers
             device.Open();
 
             // TODO: Add other dofus retro servers
-            device.Filter = "ip and tcp and src 172.65.204.203";
+            device.Filter = "ip and tcp and src 172.65.242.238";
 
             device.OnPacketArrival += Device_OnPacketArrival;
             device.StartCapture();
