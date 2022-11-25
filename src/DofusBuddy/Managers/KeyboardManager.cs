@@ -1,6 +1,6 @@
 ﻿using PInvoke;
 
-namespace DofusBuddy.Core.Managers
+namespace DofusBuddy.Managers
 {
     public class KeyboardManager
     {

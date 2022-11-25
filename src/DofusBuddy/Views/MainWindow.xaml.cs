@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using DofusBuddy.Core.Settings;
+using DofusBuddy.Settings;
 using Microsoft.Extensions.Options;
 using Wpf.Ui.Controls;
 

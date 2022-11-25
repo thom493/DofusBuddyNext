@@ -2,11 +2,11 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
-using DofusBuddy.Core.Settings;
 using DofusBuddy.Models;
+using DofusBuddy.Settings;
 using Microsoft.Extensions.Options;
 
-namespace DofusBuddy.Core.Managers
+namespace DofusBuddy.Managers
 {
     public class CharacterManager
     {

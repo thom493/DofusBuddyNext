@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DofusBuddy.Core.GameEvents;
-using DofusBuddy.Core.Settings;
+using DofusBuddy.GameEvents;
 using DofusBuddy.Models;
+using DofusBuddy.Settings;
 using Gma.System.MouseKeyHook;
 using Microsoft.Extensions.Options;
 using PInvoke;
 using SharpHook;
 
-namespace DofusBuddy.Core.Managers
+namespace DofusBuddy.Managers
 {
     public class GameManager
     {

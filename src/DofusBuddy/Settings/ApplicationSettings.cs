@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DofusBuddy.Core.Settings
+namespace DofusBuddy.Settings
 {
     public class ApplicationSettings
     {

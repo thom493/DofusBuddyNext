@@ -5,12 +5,12 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-using DofusBuddy.Core.GameEvents;
+using DofusBuddy.GameEvents;
 using PacketDotNet;
 using SharpPcap;
 using SharpPcap.LibPcap;
 
-namespace DofusBuddy.Core.Managers
+namespace DofusBuddy.Managers
 {
     public class PacketManager
     {

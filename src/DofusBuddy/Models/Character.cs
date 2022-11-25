@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
-using DofusBuddy.Core.Settings;
+using DofusBuddy.Settings;
 
 namespace DofusBuddy.Models
 {

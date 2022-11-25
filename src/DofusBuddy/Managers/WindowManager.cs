@@ -1,7 +1,7 @@
 ﻿using System;
 using PInvoke;
 
-namespace DofusBuddy.Core.Managers
+namespace DofusBuddy.Managers
 {
     public class WindowManager
     {
@@ -32,7 +32,7 @@ namespace DofusBuddy.Core.Managers
 
         public void SendLeftClickToWindow(IntPtr windowHandle, int x, int y)
         {
-            var lParam = (IntPtr)(x | (y << 16));
+            nint lParam = x | (y << 16);
             User32.PostMessage(windowHandle, User32.WindowMessage.WM_LBUTTONDOWN, new IntPtr(0x0001), lParam);
             User32.PostMessage(windowHandle, User32.WindowMessage.WM_LBUTTONUP, new IntPtr(0x0000), lParam);
         }

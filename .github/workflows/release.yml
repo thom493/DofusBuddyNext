@@ -16,7 +16,7 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 7.0.x
       - name: Publish
         run: dotnet publish src\DofusBuddy\DofusBuddy.csproj --nologo -c Release -r win-x64 --self-contained false -p:DebugType=None
       - name: Zip release

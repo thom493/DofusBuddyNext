@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DofusBuddy.Core.GameEvents
+namespace DofusBuddy.GameEvents
 {
     public class GroupInvitationEventArgs : EventArgs
     {

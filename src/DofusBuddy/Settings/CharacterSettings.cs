@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace DofusBuddy.Core.Settings
+namespace DofusBuddy.Settings
 {
     public class CharacterSettings : ObservableObject
     {

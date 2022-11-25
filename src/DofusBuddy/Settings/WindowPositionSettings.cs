@@ -1,4 +1,4 @@
-﻿namespace DofusBuddy.Core.Settings
+﻿namespace DofusBuddy.Settings
 {
     public class WindowPositionSettings
     {

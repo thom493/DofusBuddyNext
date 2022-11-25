@@ -1,8 +1,8 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DofusBuddy.Core.Managers;
-using DofusBuddy.Core.Settings;
+using DofusBuddy.Managers;
+using DofusBuddy.Settings;
 using DofusBuddy.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

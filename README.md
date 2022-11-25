@@ -1,6 +1,6 @@
 # DofusBuddy
 
-DofusBuddy is a .NET 6 WPF application that aims to make your life easier when using multiple accounts on Dofus retro.
+DofusBuddy is a .NET 7 WPF application that aims to make your life easier when using multiple accounts on Dofus retro.
 
 ![Example of DofusBuddy](example.png)
 
@@ -13,7 +13,7 @@ DofusBuddy is a .NET 6 WPF application that aims to make your life easier when u
 
 ## Prerequisites
 
-- .NET 6 runtime
+- .NET 7 runtime
 - Npcap <https://npcap.com/#download>
 
 ## Configuration
