@@ -24,8 +24,8 @@ jobs:
         with:
           type: zip
           filename: DofusBuddy.zip
-          directory: src\DofusBuddy\bin\Release\net6.0-windows\win-x64\publish\
+          directory: src\DofusBuddy\bin\Release\net7.0-windows\win-x64\publish\
       - name: Create Release
         uses: ncipollo/release-action@v1.11.2
         with:
-          artifacts: src\DofusBuddy\bin\Release\net6.0-windows\win-x64\publish\DofusBuddy.zip
+          artifacts: src\DofusBuddy\bin\Release\net7.0-windows\win-x64\publish\DofusBuddy.zip
