@@ -93,6 +93,7 @@ namespace DofusBuddy
             services.AddTransient<MainWindow>();
             services.AddTransient<MainPage>();
             services.AddTransient<AddCharacterView>();
+            services.AddTransient<SettingsView>();
 
             services.AddSingleton<HookManager>();
             services.AddSingleton<WindowManager>();
@@ -103,6 +104,7 @@ namespace DofusBuddy
 
             services.AddTransient<MainPageViewModel>();
             services.AddTransient<AddCharacterViewModel>();
+            services.AddTransient<SettingsViewModel>();
 
             return services.BuildServiceProvider();
         }

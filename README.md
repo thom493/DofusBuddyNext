@@ -1,5 +1,7 @@
 # DofusBuddy
 
+[![Build](https://github.com/fdescaves/DofusBuddy/actions/workflows/build.yml/badge.svg)](https://github.com/fdescaves/DofusBuddy/actions/workflows/build.yml)
+
 DofusBuddy is a .NET 7 WPF application that aims to make your life easier when using multiple accounts on Dofus retro.
 
 ![Example of DofusBuddy](example.png)

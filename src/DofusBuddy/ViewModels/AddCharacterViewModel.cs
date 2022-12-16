@@ -15,6 +15,7 @@ namespace DofusBuddy.ViewModels
         private readonly PacketManager _packetManager;
         private readonly CharacterManager _characterManager;
         private ObservableCollection<DetectedCharcter> _detectedCharacters;
+
         public ObservableCollection<DetectedCharcter> DetectedCharacters
         {
             get => _detectedCharacters;

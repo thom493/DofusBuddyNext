@@ -9,5 +9,7 @@ namespace DofusBuddy.Settings
         public WindowPositionSettings? WindowPosition { get; set; }
 
         public FeaturesSettings Features { get; set; } = new FeaturesSettings();
+
+        public PositionSettings Positions { get; set; } = new PositionSettings();
     }
 }

@@ -26,20 +26,18 @@
                        Foreground="{StaticResource BrushVioletBlueCrayola}" />
             <StackPanel Grid.Column="1"
                         Orientation="Horizontal">
-                <ui:Button Grid.Column="1"
-                           Margin="4,0,0,0"
+                <ui:Button Margin="4,0,0,0"
                            FontSize="20"
                            Padding="4"
                            Icon="PeopleSync20"
                            ToolTip="Refresh active characters"
                            Command="{Binding RefreshActiveCharactersCommand}" />
-                <ui:Button Grid.Column="1"
-                           Margin="4,0,0,0"
+                <ui:Button Margin="4,0,0,0"
                            FontSize="20"
                            Padding="4"
                            Icon="PeopleAdd24"
                            ToolTip="Add characters"
-                           Command="{Binding DisplayAddCharacterDialogCommand}" />
+                           Command="{Binding DisplayAddCharacterViewCommand}" />
             </StackPanel>
             <Rectangle Grid.Column="2"
                        Margin="4,0,0,0"
@@ -89,20 +87,28 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <Grid>
+        <Grid Margin="0,0,0,8">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0"
                        HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
                        FontSize="20"
                        FontWeight="SemiBold"
                        Text="Features"
-                       Foreground="{StaticResource BrushVioletBlueCrayola}">
-            </TextBlock>
-            <Rectangle Grid.Column="1"
-                       Margin="8,0,0,0"
+                       Foreground="{StaticResource BrushVioletBlueCrayola}" />
+            <ui:Button Grid.Column="1"
+                       Margin="4,0,0,0"
+                       FontSize="20"
+                       Padding="4"
+                       Icon="Settings20"
+                       ToolTip="Settings"
+                       Command="{Binding DisplaySettingsViewCommand}" />
+            <Rectangle Grid.Column="2"
+                       Margin="4,0,0,0"
                        Height="1"
                        Fill="{StaticResource BrushVioletBlueCrayola}" />
         </Grid>

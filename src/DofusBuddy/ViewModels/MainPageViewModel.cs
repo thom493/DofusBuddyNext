@@ -29,11 +29,18 @@ namespace DofusBuddy.ViewModels
             set => SetProperty(ref _toggleSingleReplicateMouseClicks, value);
         }
 
-        private IRelayCommand _displayAddCharacterDialogCommand;
-        public IRelayCommand DisplayAddCharacterDialogCommand
+        private IRelayCommand _displayAddCharacterViewCommand;
+        public IRelayCommand DisplayAddCharacterViewCommand
         {
-            get => _displayAddCharacterDialogCommand;
-            set => SetProperty(ref _displayAddCharacterDialogCommand, value);
+            get => _displayAddCharacterViewCommand;
+            set => SetProperty(ref _displayAddCharacterViewCommand, value);
+        }
+
+        private IRelayCommand _displaySettingsViewCommand;
+        public IRelayCommand DisplaySettingsViewCommand
+        {
+            get => _displaySettingsViewCommand;
+            set => SetProperty(ref _displaySettingsViewCommand, value);
         }
 
         private IRelayCommand _refreshActiveCharactersCommand;
@@ -58,7 +65,8 @@ namespace DofusBuddy.ViewModels
             CharacterManager = characterManager;
             ToggleReplicateMouseClicksCommand = new RelayCommand<bool>(x => gameManager.ToggleReplicateMouseClicks(x));
             ToggleSingleReplicateMouseClicks = new RelayCommand(gameManager.ToggleSingleReplicateMouseClicks);
-            DisplayAddCharacterDialogCommand = new RelayCommand(() => _serviceProvider.GetService<AddCharacterView>().Show());
+            DisplayAddCharacterViewCommand = new RelayCommand(() => _serviceProvider.GetService<AddCharacterView>().Show());
+            DisplaySettingsViewCommand = new RelayCommand(() => _serviceProvider.GetService<SettingsView>().Show());
             RefreshActiveCharactersCommand = new RelayCommand(characterManager.RefreshActiveCharacters);
         }
     }

@@ -19,21 +19,18 @@ namespace DofusBuddy.Managers
         private readonly WindowManager _windowManager;
         private readonly HookManager _hookManager;
         private readonly PacketManager _packetManager;
-        private readonly KeyboardManager _keyboardManager;
 
         public GameManager(IOptions<ApplicationSettings> options,
             CharacterManager characterManager,
             WindowManager windowManager,
             HookManager hookManager,
-            PacketManager packetManager,
-            KeyboardManager keyboardManager)
+            PacketManager packetManager)
         {
             _applicationSettings = options.Value;
             _characterManager = characterManager;
             _windowManager = windowManager;
             _hookManager = hookManager;
             _packetManager = packetManager;
-            _keyboardManager = keyboardManager;
 
             _packetManager.FightTurnPacketReceived += OnFightTurn;
             _packetManager.GroupInvitationReceived += OnGroupInvitation;
@@ -65,8 +62,9 @@ namespace DofusBuddy.Managers
 
                 if (senderCharacter is not null && receiverCharacter is not null)
                 {
-                    await Task.Delay(250);
-                    ClickOnAcceptButton(receiverCharacter);
+                    await Task.Delay(100);
+                    // Accept button positon: 43.75% of X axis, 43,75% of Y axis
+                    ClickOnGameButton(receiverCharacter, 0.4375, 0.4375);
                 }
             }
         }
@@ -80,8 +78,9 @@ namespace DofusBuddy.Managers
 
                 if (senderCharacter is not null && receiverCharacter is not null)
                 {
-                    await Task.Delay(250);
-                    ClickOnAcceptButton(receiverCharacter);
+                    await Task.Delay(100);
+                    // Accept button positon: 43.75% of X axis, 43,75% of Y axis
+                    ClickOnGameButton(receiverCharacter, 0.4375, 0.4375);
                 }
             }
         }
@@ -91,31 +90,29 @@ namespace DofusBuddy.Managers
             Character? character = _characterManager.ActiveCharacters.FirstOrDefault(x => x.Settings.Id == e.CharacterId);
             if (character is not null)
             {
-                if (_applicationSettings.Features.AutoSwitchOnFightTurn)
-                {
-                    _windowManager.SetForegroundWindow(character.Process.MainWindowHandle);
-                }
-
                 if (character.Settings.AutoSkipTurn)
                 {
+                    ClickOnGameButton(character, 0.6170, 0.9585);
+                }
+                else if (_applicationSettings.Features.AutoSwitchOnFightTurn)
+                {
                     _windowManager.SetForegroundWindow(character.Process.MainWindowHandle);
-                    _keyboardManager.SendSingleKeyPress(User32.ScanCode.SPACE);
                 }
             }
         }
 
-        private void ClickOnAcceptButton(Character receiverCharacter)
+        private void ClickOnGameButton(Character character, double xratio, double yratio)
         {
             var windowInfo = new User32.WINDOWINFO();
-            User32.GetWindowInfo(receiverCharacter.Process.MainWindowHandle, ref windowInfo);
+            User32.GetWindowInfo(character.Process.MainWindowHandle, ref windowInfo);
 
             int windowX = windowInfo.rcClient.right - windowInfo.rcClient.left;
             int windowY = windowInfo.rcClient.bottom - windowInfo.rcClient.top;
 
             // Accept button positon: 43.75% of X axis, 43,75% of Y axis
-            int acceptButtonX = (int)(windowX * 0.4375);
-            int acceptButtonY = (int)(windowY * 0.4375);
-            _windowManager.SendLeftClickToWindow(receiverCharacter.Process.MainWindowHandle, acceptButtonX, acceptButtonY);
+            int acceptButtonX = (int)(windowX * xratio);
+            int acceptButtonY = (int)(windowY * yratio);
+            _windowManager.SendLeftClickToWindow(character.Process.MainWindowHandle, acceptButtonX, acceptButtonY);
         }
 
         private async void OnMouseClick(object? sender, MouseHookEventArgs e)
