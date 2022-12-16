@@ -1,9 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using DofusBuddy.Models;
 using DofusBuddy.Settings;
+using Gma.System.MouseKeyHook;
 using Microsoft.Extensions.Options;
 
 namespace DofusBuddy.Managers
@@ -11,13 +14,17 @@ namespace DofusBuddy.Managers
     public class CharacterManager
     {
         private readonly ApplicationSettings _applicationSettings;
+        private readonly HookManager _hookManager;
+        private readonly WindowManager _windowManager;
 
         public ObservableCollection<Character> ActiveCharacters { get; set; } = new ObservableCollection<Character>();
 
-        public CharacterManager(IOptions<ApplicationSettings> options)
+        public CharacterManager(IOptions<ApplicationSettings> options, HookManager hookManager, WindowManager windowManager)
         {
             _applicationSettings = options.Value;
             RefreshActiveCharacters();
+            _hookManager = hookManager;
+            _windowManager = windowManager;
         }
 
         public void AddCharacter(CharacterSettings characterSettings)
@@ -40,6 +47,16 @@ namespace DofusBuddy.Managers
             Process? process = GetCharacterProcess(characterSettings.Name);
             if (process is not null)
             {
+                if (!string.IsNullOrEmpty(characterSettings.FocusWindowKeyBinding))
+                {
+                    var combinations = new KeyValuePair<Combination, Action>[]
+                    {
+                        new KeyValuePair<Combination, Action>(Combination.FromString(characterSettings.FocusWindowKeyBinding), () => _windowManager.SetForegroundWindow(process.MainWindowHandle))
+                    };
+
+                    _hookManager.KeyboardMouseEvents.OnCombination(combinations);
+                }
+
                 ActiveCharacters.Add(new Character(characterSettings, process));
             }
         }

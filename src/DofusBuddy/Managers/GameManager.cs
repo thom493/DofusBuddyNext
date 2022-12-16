@@ -176,7 +176,6 @@ namespace DofusBuddy.Managers
         {
             var keyboardKeyBindings = new List<KeyValuePair<Combination, Action>>();
             AddReplicateMouseClicksKeyBinding(keyboardKeyBindings);
-            AddFocusWindowKeyBinding(keyboardKeyBindings);
             _hookManager.KeyboardMouseEvents.OnCombination(keyboardKeyBindings);
         }
 
@@ -189,15 +188,6 @@ namespace DofusBuddy.Managers
             {
                 _applicationSettings.Features.ReplicateLeftMouseClicks = !_applicationSettings.Features.ReplicateLeftMouseClicks;
                 ToggleReplicateMouseClicks(_applicationSettings.Features.ReplicateLeftMouseClicks);
-            }
-        }
-
-        private void AddFocusWindowKeyBinding(List<KeyValuePair<Combination, Action>> bindings)
-        {
-            foreach (Character character in _characterManager.ActiveCharacters.Where(x => !string.IsNullOrEmpty(x.Settings.FocusWindowKeyBinding)))
-            {
-                var combination = Combination.FromString(character.Settings.FocusWindowKeyBinding);
-                bindings.Add(new KeyValuePair<Combination, Action>(combination, () => _windowManager.SetForegroundWindow(character.Process.MainWindowHandle)));
             }
         }
     }
