@@ -22,9 +22,9 @@ namespace DofusBuddy.Managers
         public CharacterManager(IOptions<ApplicationSettings> options, HookManager hookManager, WindowManager windowManager)
         {
             _applicationSettings = options.Value;
-            RefreshActiveCharacters();
             _hookManager = hookManager;
             _windowManager = windowManager;
+            RefreshActiveCharacters();
         }
 
         public void AddCharacter(CharacterSettings characterSettings)
