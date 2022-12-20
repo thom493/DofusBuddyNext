@@ -30,6 +30,7 @@ namespace DofusBuddy.Views
                 Top = _applicationSettings.WindowPosition.Top;
                 Left = _applicationSettings.WindowPosition.Left;
                 Width = _applicationSettings.WindowPosition.Width;
+                Height = _applicationSettings.WindowPosition.Height;
             }
         }
 
@@ -39,7 +40,8 @@ namespace DofusBuddy.Views
             {
                 Top = Top,
                 Left = Left,
-                Width = Width
+                Width = Width,
+                Height = Height
             };
         }
     }
