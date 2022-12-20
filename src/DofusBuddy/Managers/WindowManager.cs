@@ -37,6 +37,17 @@ namespace DofusBuddy.Managers
             User32.PostMessage(windowHandle, User32.WindowMessage.WM_LBUTTONUP, new IntPtr(0x0000), lParam);
         }
 
+        public void SendLeftClickToWindow(IntPtr windowHandle, double xratio, double yratio)
+        {
+            var windowInfo = new User32.WINDOWINFO();
+            User32.GetWindowInfo(windowHandle, ref windowInfo);
+
+            int x = (int)((windowInfo.rcClient.right - windowInfo.rcClient.left) * xratio);
+            int y = (int)((windowInfo.rcClient.bottom - windowInfo.rcClient.top) * yratio);
+
+            SendLeftClickToWindow(windowHandle, x, y);
+        }
+
         public User32.WINDOWINFO GetWindowInfo(IntPtr windowHandle)
         {
             var windowInfo = new User32.WINDOWINFO();
