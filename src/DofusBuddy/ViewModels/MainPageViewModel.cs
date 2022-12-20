@@ -50,6 +50,12 @@ namespace DofusBuddy.ViewModels
             set => SetProperty(ref _refreshActiveCharactersCommand, value);
         }
 
+        private IRelayCommand _connectFirstCharacterOfEveryGameWindow;
+        public IRelayCommand ConnectFirstCharacterOfEveryGameWindowCommand
+        {
+            get => _connectFirstCharacterOfEveryGameWindow;
+            set => SetProperty(ref _connectFirstCharacterOfEveryGameWindow, value);
+        }
         private ApplicationSettings _applicationSettings;
 
         public ApplicationSettings ApplicationSettings
@@ -68,6 +74,7 @@ namespace DofusBuddy.ViewModels
             DisplayAddCharacterViewCommand = new RelayCommand(() => _serviceProvider.GetService<AddCharacterView>().Show());
             DisplaySettingsViewCommand = new RelayCommand(() => _serviceProvider.GetService<SettingsView>().Show());
             RefreshActiveCharactersCommand = new RelayCommand(characterManager.RefreshActiveCharacters);
+            ConnectFirstCharacterOfEveryGameWindowCommand = new RelayCommand(characterManager.ConnectFirstCharacterOfEveryGameWindow);
         }
     }
 }

@@ -7,7 +7,7 @@
       xmlns:vm="clr-namespace:DofusBuddy.ViewModels"
       Title="MainPage"
       d:DataContext="{d:DesignInstance vm:MainPageViewModel}"
-      d:DesignHeight="500"
+      d:DesignHeight="600"
       d:DesignWidth="350"
       mc:Ignorable="d">
     <StackPanel>
@@ -176,5 +176,10 @@
                            FontSize="24"
                            ToolTip="Automatically accept trade invitations from your characters" />
         </StackPanel>
+        <ui:Button  Margin="0,8,0,0"
+                    Icon="Play24"
+                    FontSize="16"
+                    Command="{Binding ConnectFirstCharacterOfEveryGameWindowCommand}"
+                    ToolTip="For every dofus window, connect on last used character (first character of the first server in the list)" />
     </StackPanel>
 </Page>

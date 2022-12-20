@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using DofusBuddy.Models;
 using DofusBuddy.Settings;
 using Gma.System.MouseKeyHook;
@@ -40,6 +41,30 @@ namespace DofusBuddy.Managers
             {
                 TryAddActiveCharacter(characterSettings);
             }
+        }
+
+        public async void ConnectFirstCharacterOfEveryGameWindow()
+        {
+            IEnumerable<Process> processes = Process
+                .GetProcessesByName("Dofus Retro")
+                .Where(x => x.MainWindowHandle != default && x.MainWindowTitle.StartsWith("Dofus Retro"));
+
+            foreach (Process process in processes)
+            {
+                _windowManager.SetForegroundWindow(process.MainWindowHandle);
+
+                _windowManager.SendLeftClickToWindow(process.MainWindowHandle, 0.2540, 0.5156);
+                _windowManager.SendLeftClickToWindow(process.MainWindowHandle, 0.2540, 0.5156);
+
+                await Task.Delay(2000);
+
+                _windowManager.SendLeftClickToWindow(process.MainWindowHandle, 0.2540, 0.5156);
+                _windowManager.SendLeftClickToWindow(process.MainWindowHandle, 0.2540, 0.5156);
+            }
+
+            await Task.Delay(2000);
+
+            RefreshActiveCharacters();
         }
 
         private void TryAddActiveCharacter(CharacterSettings characterSettings)
