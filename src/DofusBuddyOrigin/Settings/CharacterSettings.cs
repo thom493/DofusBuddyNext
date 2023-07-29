@@ -10,6 +10,7 @@ namespace DofusBuddy.Settings
         private string? _focusWindowKeyBinding;
         private bool _replicateMouseClick;
         private bool _autoSkipTurn;
+        private bool _precastSpell;
 
         public string? Id
         {

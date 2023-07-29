@@ -53,16 +53,32 @@ namespace DofusBuddy.Managers
             {
                 _windowManager.SetForegroundWindow(process.MainWindowHandle);
 
-                _windowManager.SendLeftClickToWindow(process.MainWindowHandle, 0.2540, 0.5156);
-                _windowManager.SendLeftClickToWindow(process.MainWindowHandle, 0.2540, 0.5156);
+                _windowManager.SendLeftClickToWindow(process.MainWindowHandle, 0.3980, 0.5718);
+                _windowManager.SendLeftClickToWindow(process.MainWindowHandle, 0.3980, 0.5718);
 
-                await Task.Delay(2000);
+                await Task.Delay(5000);
 
-                _windowManager.SendLeftClickToWindow(process.MainWindowHandle, 0.2540, 0.5156);
-                _windowManager.SendLeftClickToWindow(process.MainWindowHandle, 0.2540, 0.5156);
+                _windowManager.SendLeftClickToWindow(process.MainWindowHandle, 0.3980, 0.5718);
+                _windowManager.SendLeftClickToWindow(process.MainWindowHandle, 0.3980, 0.5718);
             }
 
             await Task.Delay(2000);
+
+            RefreshActiveCharacters();
+        }
+
+        public async void MaximizedEveryGameWindow()
+        {
+            IEnumerable<Process> processes = Process
+                .GetProcessesByName("Dofus Retro")
+                .Where(x => x.MainWindowHandle != default && x.MainWindowTitle.StartsWith("Dofus Retro"));
+
+            foreach (Process process in processes)
+            {
+                _windowManager.MaximizedWindow(process.MainWindowHandle);
+            }
+
+            await Task.Delay(100);
 
             RefreshActiveCharacters();
         }

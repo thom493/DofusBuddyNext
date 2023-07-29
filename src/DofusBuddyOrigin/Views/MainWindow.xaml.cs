@@ -1,7 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using DofusBuddy.Settings;
 using Microsoft.Extensions.Options;
 using Wpf.Ui.Controls;
+using Wpf.Ui.Controls.Interfaces;
 
 namespace DofusBuddy.Views
 {
@@ -14,13 +16,10 @@ namespace DofusBuddy.Views
 
         public MainWindow(IOptions<ApplicationSettings> options, MainPage mainPage)
         {
-            _applicationSettings = options.Value;
-
-            InitializeComponent();
-
-            SetMainWindowSizeAndPosition();
-
-            MainFrame.Navigate(mainPage);
+                _applicationSettings = options.Value;
+                InitializeComponent();
+                SetMainWindowSizeAndPosition();
+                MainFrame.Navigate(mainPage);
         }
 
         private void SetMainWindowSizeAndPosition()

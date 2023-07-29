@@ -7,7 +7,7 @@
       xmlns:vm="clr-namespace:DofusBuddy.ViewModels"
       Title="MainPage"
       d:DataContext="{d:DesignInstance vm:MainPageViewModel}"
-      d:DesignHeight="600"
+      d:DesignHeight="620"
       d:DesignWidth="350"
       mc:Ignorable="d">
     <StackPanel>
@@ -78,7 +78,7 @@
                                              IsChecked="{Binding Settings.ReplicateMouseClick}">
                                 <ui:SymbolIcon Symbol="CursorClick24"
                                                FontSize="20"
-                                               ToolTip="On mouse left click, replicate to this character window with a delay"
+                                               ToolTip="On mouse left click, replicate to this character window with a delay."
                                                Margin="-4,0,0,0" />
                             </ui:ToggleSwitch>
                         </StackPanel>
@@ -123,7 +123,7 @@
             <ui:SymbolIcon Margin="8,0,8,0"
                            Symbol="CursorClick24"
                            FontSize="24"
-                           ToolTip="On mouse left click, replicate to every game window with a delay" />
+                           ToolTip="On mouse left click, replicate to every game window with a delay." />
             <ui:NumberBox IntegersOnly="True"
                           Step="10"
                           ClearButtonEnabled="False"
@@ -139,7 +139,7 @@
             <ui:SymbolIcon Margin="8,0,0,0"
                            Symbol="PhoneVerticalScroll24"
                            FontSize="24"
-                           ToolTip="On mouse wheel click, send left click to every game window without delay" />
+                           ToolTip="On mouse wheel click, send left click to every game window without delay." />
         </StackPanel>
         <StackPanel Margin="0,8,0,0"
                     Orientation="Horizontal">
@@ -150,7 +150,7 @@
             <ui:SymbolIcon Margin="8,0,0,0"
                            Symbol="PeopleSync20"
                            FontSize="24"
-                           ToolTip="Automatically switch active window to the corresponding character on fight turn" />
+                           ToolTip="Automatically switch active window to the corresponding character on fight turn." />
         </StackPanel>
         <StackPanel Margin="0,8,0,0"
                     Orientation="Horizontal">
@@ -162,7 +162,7 @@
             <ui:SymbolIcon Margin="8,0,0,0"
                            Symbol="PeopleAdd24"
                            FontSize="24"
-                           ToolTip="Automatically accept group invitations from your characters" />
+                           ToolTip="Automatically accept group invitations from your characters." />
         </StackPanel>
         <StackPanel Margin="0,8,0,0"
                     Orientation="Horizontal">
@@ -174,12 +174,57 @@
             <ui:SymbolIcon Margin="8,0,0,0"
                            Symbol="Backpack24"
                            FontSize="24"
-                           ToolTip="Automatically accept trade invitations from your characters" />
+                           ToolTip="Automatically accept trade invitations from your characters." />
         </StackPanel>
-        <ui:Button  Margin="0,8,0,0"
+        <StackPanel Margin="0,8,0,0"
+                    Orientation="Horizontal">
+            <ui:ToggleSwitch Margin="0,8,0,0"
+                             FontSize="16"
+                             FontWeight="SemiBold"
+                             Background="{StaticResource BrushGreenPantone}"
+                             IsChecked="{Binding ApplicationSettings.Features.PrecastFirstSpell}" />
+            <ui:SymbolIcon Margin="8,0,0,0"
+                           Symbol="wand24"
+                           FontSize="24"
+                           ToolTip="Precast the first spell in your spell bar from characters automatically passing turns." />
+            <ui:NumberBox Margin="8,0,0,0"
+                          IntegersOnly="True"
+                          Step="100"
+                          ClearButtonEnabled="False"
+                          IsReadOnly="True"
+                          ToolTip="Delay before passing turn."
+                          Text="{Binding ApplicationSettings.Features.PrecastSpellAwaitDelay}" />
+            <!--
+            <ui:NumberBox Margin="8,0,0,0"
+                          IntegersOnly="True"
+                          Step="1"
+                          ClearButtonEnabled="False"
+                          IsReadOnly="True"
+                          ToolTip="Spell Cooldown in turn"
+                          Text="{Binding ApplicationSettings.Features.CooldownTurn}" />
+            -->
+        </StackPanel>
+        <StackPanel Margin="0,10,0,0"
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Left">
+            <ui:Button  Margin="0,8,8,8"
                     Icon="Play24"
                     FontSize="16"
                     Command="{Binding ConnectFirstCharacterOfEveryGameWindowCommand}"
-                    ToolTip="For every dofus window, connect on last used character (first character of the first server in the list)" />
+                    ToolTip="For every dofus window, connect on last used character (first character of the first server in the list)." />
+            <ui:Button  Margin="0,8,8,8"
+                    Icon="arrowMaximize24"
+                    FontSize="16"
+                    Command="{Binding MaximizedEveryGameWindowCommand}"
+                    ToolTip="For every dofus window, maximized the window before (character connection)." />
+        </StackPanel>
+        <TextBlock Margin="8"                   
+                   Text="DofusBuddy Origin v.1.8"
+                   FontSize="10"
+                   TextAlignment="Right"
+                   FontWeight="SemiBold"
+                   Foreground="#FF797979"
+                   TextWrapping="Wrap" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
     </StackPanel>
 </Page>

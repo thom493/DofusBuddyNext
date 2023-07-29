@@ -26,17 +26,33 @@ namespace DofusBuddy
 
         public App()
         {
-            EnsureConfigurationExists();
-
-            ServiceProvider = ConfigureServices();
-
-            InitializeComponent();
+            try
+            {
+                EnsureConfigurationExists();
+                ServiceProvider = ConfigureServices();
+                InitializeComponent();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception to a file
+                File.WriteAllText(Path.Combine(_dofusBuddyAppDataFolderPath, "DofusBuddy_AppConstructor_Error.txt"), ex.ToString());
+                throw;
+            }
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            MainWindow mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            try
+            {
+                MainWindow mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+                mainWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception to a file
+                File.WriteAllText(Path.Combine(_dofusBuddyAppDataFolderPath, "DofusBuddy_Startup_Error.txt"), ex.ToString());
+                throw;
+            }
         }
 
         protected override void OnExit(ExitEventArgs e)

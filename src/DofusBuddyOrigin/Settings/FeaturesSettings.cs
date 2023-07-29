@@ -7,9 +7,12 @@ namespace DofusBuddy.Settings
     {
         private bool _replicateLeftMouseClicks;
         private int _replicateLeftMouseClicksDelay = 150;
+        private int _precastSpellAwaitDelay = 1000;
+        private int _cooldownTurn = 5;
         private string? _replicateMouseClicksKeyBinding;
         private bool _leftMouseClickOnWheelClick;
         private bool _autoSwitchOnFightTurn;
+        private bool _precastFirstSpell;
         private bool _autoAcceptGroupInvitation;
         private bool _autoAcceptTradeInvitation;
 
@@ -24,6 +27,18 @@ namespace DofusBuddy.Settings
         {
             get => _replicateLeftMouseClicksDelay;
             set => SetProperty(ref _replicateLeftMouseClicksDelay, value);
+        }
+
+        public int PrecastSpellAwaitDelay
+        {
+            get => _precastSpellAwaitDelay;
+            set => SetProperty(ref _precastSpellAwaitDelay, value);
+        }
+
+        public int CooldownTurn
+        {
+            get => _cooldownTurn;
+            set => SetProperty(ref _cooldownTurn, value);
         }
 
         public string? ReplicateMouseClicksKeyBinding
@@ -42,6 +57,12 @@ namespace DofusBuddy.Settings
         {
             get => _autoSwitchOnFightTurn;
             set => SetProperty(ref _autoSwitchOnFightTurn, value);
+        }
+
+        public bool PrecastFirstSpell
+        {
+            get => _precastFirstSpell;
+            set => SetProperty(ref _precastFirstSpell, value);
         }
 
         public bool AutoAcceptGroupInvitation

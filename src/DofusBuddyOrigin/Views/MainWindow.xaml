@@ -8,20 +8,20 @@
              d:DesignHeight="500"
              d:DesignWidth="350"
              MinWidth="0"
-             Title="Dofus Buddy"
+             Title="DofusBuddy Origin"
              ExtendsContentIntoTitleBar="True"
              Background="{ui:ThemeResource ApplicationBackgroundBrush}"
              Closing="UiWindow_Closing"
              Topmost="True">
     <StackPanel Orientation="Vertical">
         <ui:TitleBar FontWeight="Bold"
-                     Title="Dofus Buddy"
+                     Title="DofusBuddy Origin"
                      Icon="/Resources/dofus-buddy.ico"
                      ShowMaximize="False">
             <ui:TitleBar.Tray>
                 <ui:NotifyIcon FocusOnLeftClick="True"
                                MenuOnRightClick="True"
-                               TooltipText="Dofus Buddy">
+                               TooltipText="DofusBuddy Origin">
                 </ui:NotifyIcon>
             </ui:TitleBar.Tray>
         </ui:TitleBar>

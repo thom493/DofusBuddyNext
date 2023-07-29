@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Threading.Tasks;
 using DofusBuddy.GameEvents;
@@ -19,6 +20,8 @@ namespace DofusBuddy.Managers
         private readonly WindowManager _windowManager;
         private readonly HookManager _hookManager;
         private readonly PacketManager _packetManager;
+
+        private int turn = 0;
 
         public GameManager(IOptions<ApplicationSettings> options,
             CharacterManager characterManager,
@@ -63,7 +66,7 @@ namespace DofusBuddy.Managers
                 if (senderCharacter is not null && receiverCharacter is not null)
                 {
                     await Task.Delay(100);
-                    _windowManager.SendLeftClickToWindow(receiverCharacter.Process.MainWindowHandle, 0.4375, 0.4375);
+                    _windowManager.SendLeftClickToWindow(receiverCharacter.Process.MainWindowHandle, 0.5796, 0.4259); //updated for maximized windows with left chat
                 }
             }
         }
@@ -78,7 +81,7 @@ namespace DofusBuddy.Managers
                 if (senderCharacter is not null && receiverCharacter is not null)
                 {
                     await Task.Delay(100);
-                    _windowManager.SendLeftClickToWindow(receiverCharacter.Process.MainWindowHandle, 0.4375, 0.4375);
+                    _windowManager.SendLeftClickToWindow(receiverCharacter.Process.MainWindowHandle, 0.5796, 0.4259); //updated for maximized windows with left chat
                 }
             }
         }
@@ -90,8 +93,25 @@ namespace DofusBuddy.Managers
             {
                 if (character.Settings.AutoSkipTurn)
                 {
-                    await Task.Delay(500);
-                    _windowManager.SendLeftClickToWindow(character.Process.MainWindowHandle, 0.6170, 0.9440);
+                    // add precast spell here
+                    if (_applicationSettings.Features.PrecastFirstSpell) //&& turn <= _applicationSettings.Features.CooldownTurn)
+                    {
+                        //CountTurn();
+                        // Send the "1" key (virtual key code 0x31) to the window
+                        _windowManager.SendKeyToWindow(character.Process.MainWindowHandle, 0x31);
+                        await Task.Delay(_applicationSettings.Features.PrecastSpellAwaitDelay);
+                    }
+                    await Task.Delay(300);
+                    // Send the "F1" key (virtual key code 0x70) to the window
+                    //_windowManager.SendKeyToWindow(character.Process.MainWindowHandle, 0x70);
+                    //Doesn't record all the time so changing for left click
+                    _windowManager.SendLeftClickToWindow(character.Process.MainWindowHandle, 0.7593, 0.9454);
+                    await Task.Delay(50);
+                    _windowManager.SendLeftClickToWindow(character.Process.MainWindowHandle, 0.7593, 0.9454);
+                    await Task.Delay(50);
+                    _windowManager.SendLeftClickToWindow(character.Process.MainWindowHandle, 0.7593, 0.9454);
+                    await Task.Delay(50);
+                    _windowManager.SendLeftClickToWindow(character.Process.MainWindowHandle, 0.7593, 0.9454);
                 }
                 else if (_applicationSettings.Features.AutoSwitchOnFightTurn)
                 {
@@ -166,14 +186,30 @@ namespace DofusBuddy.Managers
 
         private void AddReplicateMouseClicksKeyBinding(List<KeyValuePair<Combination, Action>> bindings)
         {
-            var combination = Combination.FromString(_applicationSettings.Features.ReplicateMouseClicksKeyBinding);
-            bindings.Add(new KeyValuePair<Combination, Action>(combination, action));
-
-            void action()
+            // if ReplicateMouseClicksKeyBinding is not null then parse it
+            if (!string.IsNullOrEmpty(_applicationSettings.Features.ReplicateMouseClicksKeyBinding))
             {
-                _applicationSettings.Features.ReplicateLeftMouseClicks = !_applicationSettings.Features.ReplicateLeftMouseClicks;
-                ToggleReplicateMouseClicks(_applicationSettings.Features.ReplicateLeftMouseClicks);
+                var combination = Combination.FromString(_applicationSettings.Features.ReplicateMouseClicksKeyBinding);
+                void action()
+                {
+                    _applicationSettings.Features.ReplicateLeftMouseClicks = !_applicationSettings.Features.ReplicateLeftMouseClicks;
+                    ToggleReplicateMouseClicks(_applicationSettings.Features.ReplicateLeftMouseClicks);
+                }
+                bindings.Add(new KeyValuePair<Combination, Action>(combination, action));
             }
         }
+        public void CountTurn()
+        {
+            // Increment the counter
+            turn++;
+
+            // Check if the counter reaches the desired limit (5)
+            if (turn > _applicationSettings.Features.CooldownTurn)
+            {
+                // Reset the counter
+                turn = 0;
+            }
+        }
+
     }
 }

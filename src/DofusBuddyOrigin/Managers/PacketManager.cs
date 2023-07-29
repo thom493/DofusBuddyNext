@@ -14,10 +14,10 @@ namespace DofusBuddy.Managers
 {
     public class PacketManager
     {
-        private readonly Regex _fightTurnRegex = new("GTS(\\d*)\\|");
+        private readonly Regex _fightTurnRegex = new("GTS(-?\\d*\\.{0,1}\\d+)\\|(\\d+)\\|(\\d)");
         private readonly Regex _chatMessageRegex = new("^cMK\\|(\\d*)\\|(.*?)\\|(.*?)\\|");
-        private readonly Regex _groupInvitationRegex = new("^PIK(.*?)\\|(.*)\0");
-        private readonly Regex _tradeInvitationRegex = new("^ERK(.*?)\\|(.*)\\|1");
+        private readonly Regex _groupInvitationRegex = new("^PIK(.*?)\\|(.*?)\0");
+        private readonly Regex _tradeInvitationRegex = new("^ERK(.*?)\\|(.*?)\\|1");
 
         private DateTimeOffset _lastGroupInvitationInvoked = DateTimeOffset.Now;
         private DateTimeOffset _lastTradeInvitationInvoked = DateTimeOffset.Now;
@@ -40,8 +40,8 @@ namespace DofusBuddy.Managers
 
             device.Open();
 
-            // TODO: Add other dofus retro servers
-            device.Filter = "ip and tcp and src 172.65.242.238";
+            // TODO: Add/update other dofus retro servers if new server are coming out
+            device.Filter = "ip and tcp and ( src 172.65.217.15 or src 172.65.255.133 or src 172.65.242.238 or src 172.65.253.238 or src 172.65.221.237)";
 
             device.OnPacketArrival += Device_OnPacketArrival;
             device.StartCapture();

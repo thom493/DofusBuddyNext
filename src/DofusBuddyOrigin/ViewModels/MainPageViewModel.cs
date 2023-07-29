@@ -56,6 +56,14 @@ namespace DofusBuddy.ViewModels
             get => _connectFirstCharacterOfEveryGameWindow;
             set => SetProperty(ref _connectFirstCharacterOfEveryGameWindow, value);
         }
+
+        private IRelayCommand _maximizedEveryGameWindow;
+        public IRelayCommand MaximizedEveryGameWindowCommand
+        {
+            get => _maximizedEveryGameWindow;
+            set => SetProperty(ref _maximizedEveryGameWindow, value);
+        }
+
         private ApplicationSettings _applicationSettings;
 
         public ApplicationSettings ApplicationSettings
@@ -75,6 +83,7 @@ namespace DofusBuddy.ViewModels
             DisplaySettingsViewCommand = new RelayCommand(() => _serviceProvider.GetService<SettingsView>().Show());
             RefreshActiveCharactersCommand = new RelayCommand(characterManager.RefreshActiveCharacters);
             ConnectFirstCharacterOfEveryGameWindowCommand = new RelayCommand(characterManager.ConnectFirstCharacterOfEveryGameWindow);
+            MaximizedEveryGameWindowCommand = new RelayCommand(characterManager.MaximizedEveryGameWindow);
         }
     }
 }

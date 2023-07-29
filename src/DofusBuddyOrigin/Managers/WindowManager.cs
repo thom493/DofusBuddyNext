@@ -27,6 +27,11 @@ namespace DofusBuddy.Managers
             User32.AttachThreadInput(foregroundWindowThreadProcessId, currentThreadId, false);
         }
 
+        public void MaximizedWindow(IntPtr windowHandle)
+        {
+            User32.ShowWindow(windowHandle, User32.WindowShowStyle.SW_SHOWMAXIMIZED);
+        }
+
         public void SendLeftClickToWindow(IntPtr windowHandle, int x, int y)
         {
             nint lParam = x | (y << 16);
@@ -43,6 +48,12 @@ namespace DofusBuddy.Managers
             int y = (int)((windowInfo.rcClient.bottom - windowInfo.rcClient.top) * yratio);
 
             SendLeftClickToWindow(windowHandle, x, y);
+        }
+
+        public void SendKeyToWindow(IntPtr windowHandle, int virtualKeyCode)
+        {
+            User32.PostMessage(windowHandle, User32.WindowMessage.WM_KEYDOWN, (IntPtr)virtualKeyCode, IntPtr.Zero);
+            User32.PostMessage(windowHandle, User32.WindowMessage.WM_KEYUP, (IntPtr)virtualKeyCode, IntPtr.Zero);
         }
 
         public User32.WINDOWINFO GetWindowInfo(IntPtr windowHandle)
