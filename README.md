@@ -16,7 +16,7 @@ Origin is a fork of the depreciated DofusBuddy from @fdescaves with additionnal 
 - Automatically pass turn.
 - Maximized all Dofus Retro windows with one click.
 - Autologin the first character on each window.
-- Precast the first spell in the spell bar when autopassing
+- Precast the first spell in the spell bar when autopassing. The delay before passing turn can be customized
 - Server list updated (works with all servers)
 
 ## Prerequisites
@@ -26,4 +26,4 @@ Origin is a fork of the depreciated DofusBuddy from @fdescaves with additionnal 
 
 ## Configuration
 
-Can be find in <../Appdata/Roaming/Dofus.Buddy/appsettings.json>
+Can be found in <../Appdata/Roaming/Dofus.Buddy/appsettings.json>
