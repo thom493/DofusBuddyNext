@@ -18,14 +18,14 @@ jobs:
         with:
           dotnet-version: 7.0.x
       - name: Publish
-        run: dotnet publish src\DofusBuddy\DofusBuddy.csproj --nologo -c Release -r win-x64 --self-contained false -p:DebugType=None
+        run: dotnet publish src\DofusBuddyOrigin\DofusBuddyOrigin.csproj --nologo -c Release -r win-x64 --self-contained false -p:DebugType=None
       - name: Zip release
         uses: thedoctor0/zip-release@0.6.2
         with:
           type: zip
           filename: DofusBuddy.zip
-          directory: src\DofusBuddy\bin\Release\net7.0-windows\win-x64\publish\
+          directory: src\DofusBuddyOrigin\bin\Release\net7.0-windows\win-x64\publish\
       - name: Create Release
         uses: ncipollo/release-action@v1.11.2
         with:
-          artifacts: src\DofusBuddy\bin\Release\net7.0-windows\win-x64\publish\DofusBuddy.zip
+          artifacts: src\DofusBuddyOrigin\bin\Release\net7.0-windows\win-x64\publish\DofusBuddy_Origin.zip
